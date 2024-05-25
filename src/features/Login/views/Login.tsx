@@ -1,6 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
-import API from "../../../shared";
+import API from "../../../shared/api/api";
 import {
   Box,
   Button,
@@ -13,13 +12,13 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-interface ILoginData {
+interface IDadosLogin {
   matricula: string;
   senha: string;
 }
 
 export const Login = () => {
-  const [dadosLogin, setDadosLogin] = useState<ILoginData>({
+  const [dadosLogin, setDadosLogin] = useState<IDadosLogin>({
     matricula: "",
     senha: "",
   });
