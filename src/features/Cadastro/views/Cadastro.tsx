@@ -25,6 +25,11 @@ interface IDadosCadastro {
   status: number;
 }
 
+interface IDadosTipoUsuario {
+  id: number;
+  descricao: string;
+}
+
 export const Login = () => {
   const [dadosCadastro, setDadosCadastro] = useState<IDadosCadastro>({
     nome: "",
@@ -35,7 +40,7 @@ export const Login = () => {
     senha: "",
     status: 0,
   });
-  const [tiposUsuario, setTiposUsuario] = useState<number[]>();
+  const [tiposUsuario, setTiposUsuario] = useState<IDadosTipoUsuario[]>();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -168,7 +173,7 @@ export const Login = () => {
               }
             >
               {tiposUsuario?.map((tipo) => (
-                <option value={tipo}>{tipo}</option>
+                <option value={tipo.id}>{tipo.descricao}</option>
               ))}
             </Select>
           </FormControl>
