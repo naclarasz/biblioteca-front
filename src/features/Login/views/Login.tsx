@@ -11,6 +11,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 interface IDadosLogin {
   matricula: string;
@@ -39,10 +40,6 @@ export const Login = () => {
     }
   };
 
-  const realizarCadastro = () => {
-    //redirecionar para tela de cadastro
-  };
-
   const loginDeveEstarDesabilitado = !dadosLogin.matricula || !dadosLogin.senha;
 
   return (
@@ -51,6 +48,7 @@ export const Login = () => {
         w={["full", "md"]}
         p={[8, 10]}
         mt={[20, "10vh"]}
+        mb={[20, "10vh"]}
         mx="auto"
         border={["none", "1px"]}
         borderColor={["", "gray.300"]}
@@ -95,8 +93,8 @@ export const Login = () => {
           >
             Login
           </Button>
-          <Button variant="link" colorScheme="blue" onClick={realizarCadastro}>
-            Não tem uma conta? Realize o cadastro
+          <Button variant="link" colorScheme="blue">
+            <Link to="/cadastro">Não tem uma conta? Realize o cadastro</Link>
           </Button>
         </VStack>
       </Box>

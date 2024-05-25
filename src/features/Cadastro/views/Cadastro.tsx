@@ -8,12 +8,14 @@ import {
   FormLabel,
   Heading,
   Input,
+  Radio,
   RadioGroup,
   Select,
   Stack,
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { Link, useNavigate } from "react-router-dom";
 
 interface IDadosCadastro {
   nome: string;
@@ -30,7 +32,7 @@ interface IDadosTipoUsuario {
   descricao: string;
 }
 
-export const Login = () => {
+export const Cadastro = () => {
   const [dadosCadastro, setDadosCadastro] = useState<IDadosCadastro>({
     nome: "",
     endereco: "",
@@ -47,7 +49,11 @@ export const Login = () => {
     buscarListaTiposUsuario();
   }, []);
 
-  const navegarLogin = () => {};
+  const navigate = useNavigate();
+
+  const navegarLogin = () => {
+    navigate("/login");
+  };
 
   const buscarListaTiposUsuario = async () => {
     try {
@@ -82,11 +88,12 @@ export const Login = () => {
     !dadosCadastro.status;
 
   return (
-    <Center h="calc(100vh)" w="calc(100vw)">
+    <Center h="100%" w="calc(100vw)">
       <Box
         w={["full", "md"]}
         p={[8, 10]}
         mt={[20, "10vh"]}
+        mb={[20, "10vh"]}
         mx="auto"
         border={["none", "1px"]}
         borderColor={["", "gray.300"]}
@@ -223,7 +230,7 @@ export const Login = () => {
             Cadastrar
           </Button>
           <Button variant="link" colorScheme="blue" onClick={navegarLogin}>
-            Voltar para o login
+            <Link to="/login">Voltar para o login </Link>
           </Button>
         </VStack>
       </Box>
