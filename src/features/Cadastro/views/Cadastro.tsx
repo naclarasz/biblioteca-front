@@ -11,6 +11,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../shared";
 
 interface IDadosCadastro {
   nome: string;
@@ -27,6 +28,7 @@ interface IDadosTipoUsuario {
 }
 
 export const Cadastro = () => {
+  const navigate = useNavigate();
   const [dadosCadastro, setDadosCadastro] = useState<IDadosCadastro>({
     nome: "",
     endereco: "",
@@ -38,11 +40,15 @@ export const Cadastro = () => {
   const [tiposUsuario, setTiposUsuario] = useState<IDadosTipoUsuario[]>();
   const [loading, setLoading] = useState<boolean>(false);
 
+  const { tipoUsuarioLogado } = useAuth();
+
   useEffect(() => {
     buscarListaTiposUsuario();
   }, []);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (tipoUsuarioLogado) navigate("/");
+  }, [tipoUsuarioLogado, navigate]);
 
   const navegarLogin = () => {
     navigate("/login");

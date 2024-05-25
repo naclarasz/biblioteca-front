@@ -76,7 +76,7 @@ export const Menu = () => {
     <VStack spacing={4} align="flex-start" w="full">
       <VStack align="flex-start">
         <Heading>Bibliotecad 📚</Heading>
-        <Text fontSize="xl">Bem vindo (a)!</Text>
+        <Text fontSize="xl">Bem vindo(a), tenha uma boa leitura!</Text>
       </VStack>
       {MenuAdmin()}
       <Button variant="link" colorScheme="blue" onClick={() => {}}>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   FormControl,
@@ -13,7 +13,11 @@ import { IDadosLogin, useAuth } from "../../../shared";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const { realizarLogin } = useAuth();
+  const { realizarLogin, tipoUsuarioLogado } = useAuth();
+
+  useEffect(() => {
+    if (tipoUsuarioLogado) navigate("/");
+  }, [tipoUsuarioLogado, navigate]);
 
   const [dadosLogin, setDadosLogin] = useState<IDadosLogin>({
     email: "",
