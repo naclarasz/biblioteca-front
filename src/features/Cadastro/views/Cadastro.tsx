@@ -89,7 +89,7 @@ export const Cadastro = () => {
   return (
     <VStack spacing={4} align="flex-start" w="full">
       <VStack align="flex-start">
-        <Heading>Sistema Bibliotecário</Heading>
+        <Heading>Bibliotecad</Heading>
         <Text fontSize="xl">Realize o cadastro</Text>
       </VStack>
 

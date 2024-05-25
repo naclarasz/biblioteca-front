@@ -46,7 +46,7 @@ export const Login = () => {
   return (
     <VStack spacing={4} align="flex-start" w="full">
       <VStack align="flex-start">
-        <Heading>Sistema Bibliotecário</Heading>
+        <Heading>Bibliotecad 📚</Heading>
         <Text fontSize="xl">Realize o login</Text>
       </VStack>
 

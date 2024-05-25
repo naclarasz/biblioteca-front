@@ -72,10 +72,13 @@ export const Menu = () => {
   return (
     <VStack spacing={4} align="flex-start" w="full">
       <VStack align="flex-start">
-        <Heading>Sistema Bibliotecário</Heading>
+        <Heading>Bibliotecad 📚</Heading>
         <Text fontSize="xl">Bem vindo, Fulano!</Text>
       </VStack>
       {MenuAdmin()}
+      <Button variant="link" colorScheme="blue" onClick={() => {}}>
+        Alterar senha de acesso
+      </Button>
       <Button
         leftIcon={<BsArrowLeft />}
         variant="link"
