@@ -18,35 +18,27 @@ export const MinhaReserva = () => {
 
   return (
     <VStack spacing={4} align="flex-start" w="full">
-      <Card>
+      <Card w="100%">
         <CardHeader>
-          <Heading size="md">Client Report</Heading>
+          <Heading size="md">Minha reserva</Heading>
         </CardHeader>
 
         <CardBody>
           <Stack divider={<StackDivider />} spacing="4">
             <Box>
               <Heading size="xs" textTransform="uppercase">
-                Summary
+                Livro
               </Heading>
               <Text pt="2" fontSize="sm">
-                View a summary of all your clients over the last month.
+                Nome do livro
               </Text>
             </Box>
             <Box>
               <Heading size="xs" textTransform="uppercase">
-                Overview
+                Data prevista de devolução
               </Heading>
               <Text pt="2" fontSize="sm">
-                Check out the overview of your clients.
-              </Text>
-            </Box>
-            <Box>
-              <Heading size="xs" textTransform="uppercase">
-                Analysis
-              </Heading>
-              <Text pt="2" fontSize="sm">
-                See a detailed analysis of all your business clients.
+                01/01/2024
               </Text>
             </Box>
           </Stack>
@@ -55,6 +47,7 @@ export const MinhaReserva = () => {
       <Button
         leftIcon={<BsArrowLeft />}
         colorScheme="blue"
+        variant="link"
         onClick={() => {
           navigate("/menu");
         }}

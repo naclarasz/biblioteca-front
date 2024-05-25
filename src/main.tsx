@@ -2,9 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { Card, Center, ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Cadastro, Erro, Login, Menu } from "./features/index.ts";
+import {
+  Cadastro,
+  DadosPessoais,
+  Erro,
+  Login,
+  Menu,
+} from "./features/index.ts";
 import { MinhaReserva } from "./features/MinhaReserva/views/MinhaReserva.tsx";
 import { AppWrapper } from "./shared/components/index.ts";
 
@@ -33,6 +39,11 @@ const router = createBrowserRouter([
     path: "/minha-reserva",
     element: <MinhaReserva />,
     errorElement: <Erro />,
+  },
+  {
+    path: "/dados-pessoais",
+    element: <DadosPessoais />,
+    errorElement: <Error />,
   },
 ]);
 

@@ -1,8 +1,13 @@
 import { Button, Heading, Text, VStack } from "@chakra-ui/react";
+import { BsArrowLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 export const Menu = () => {
   const navigate = useNavigate();
+
+  const fazerLogout = () => {
+    navigate("/login");
+  };
 
   return (
     <VStack spacing={4} align="flex-start" w="full">
@@ -30,6 +35,14 @@ export const Menu = () => {
         }}
       >
         Dados pessoais
+      </Button>
+      <Button
+        leftIcon={<BsArrowLeft />}
+        variant="link"
+        colorScheme="red"
+        onClick={fazerLogout}
+      >
+        Sair da conta
       </Button>
     </VStack>
   );

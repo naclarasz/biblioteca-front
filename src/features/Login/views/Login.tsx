@@ -1,7 +1,6 @@
 import { useState } from "react";
 import API from "../../../shared/api/api";
 import {
-  Box,
   Button,
   FormControl,
   FormLabel,
@@ -10,7 +9,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useNavigation } from "react-router-dom";
 
 interface IDadosLogin {
   email: string;
@@ -18,6 +17,8 @@ interface IDadosLogin {
 }
 
 export const Login = () => {
+  const navigate = useNavigate();
+
   const [dadosLogin, setDadosLogin] = useState<IDadosLogin>({
     email: "",
     senha: "",
@@ -35,6 +36,7 @@ export const Login = () => {
     } catch (e) {
       console.error(e);
     } finally {
+      navigate("/menu");
       setLoading(false);
     }
   };
