@@ -7,6 +7,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import {
   Cadastro,
   DadosPessoais,
+  Emprestimos,
   Erro,
   Login,
   Menu,
@@ -43,7 +44,12 @@ const router = createBrowserRouter([
   {
     path: "/dados-pessoais",
     element: <DadosPessoais />,
-    errorElement: <Error />,
+    errorElement: <Erro />,
+  },
+  {
+    path: "/emprestimos",
+    element: <Emprestimos />,
+    errorElement: <Erro />,
   },
 ]);
 

@@ -5,7 +5,7 @@ export const AppWrapper = ({ children }: { children: ReactNode }) => {
   return (
     <Center minH="100vh" w="100vw">
       <Box
-        w={["full", "md"]}
+        w="auto"
         p={[8, 10]}
         mt={[20, "10vh"]}
         mb={[20, "10vh"]}
