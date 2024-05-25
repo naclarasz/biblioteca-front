@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
 import API from "../../../shared/api/api";
 import {
-  Box,
   Button,
   FormControl,
   FormLabel,
   Heading,
   Input,
-  Radio,
-  RadioGroup,
   Select,
-  Stack,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -23,11 +19,10 @@ interface IDadosCadastro {
   email: string;
   idTipoUsuario: string;
   senha: string;
-  status: number;
 }
 
 interface IDadosTipoUsuario {
-  id: number;
+  idTipoUsuario: number;
   descricao: string;
 }
 
@@ -39,7 +34,6 @@ export const Cadastro = () => {
     email: "",
     idTipoUsuario: "",
     senha: "",
-    status: 0,
   });
   const [tiposUsuario, setTiposUsuario] = useState<IDadosTipoUsuario[]>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -57,7 +51,7 @@ export const Cadastro = () => {
   const buscarListaTiposUsuario = async () => {
     try {
       setLoading(true);
-      const resposta = await API.get("/TipoUsuario");
+      const resposta = await API.get("/TipoUsuario/Listar");
       setTiposUsuario(resposta.data);
     } catch (e) {
       console.error(e);
@@ -69,7 +63,8 @@ export const Cadastro = () => {
   const realizarCadastro = async () => {
     try {
       setLoading(true);
-      await API.post("/Usuario", dadosCadastro);
+      await API.post("/Usuario/Cadastrar", dadosCadastro);
+      navigate("/login");
     } catch (e) {
       console.error(e);
     } finally {
@@ -83,13 +78,12 @@ export const Cadastro = () => {
     !dadosCadastro.telefone ||
     !dadosCadastro.email ||
     !dadosCadastro.idTipoUsuario ||
-    !dadosCadastro.senha ||
-    !dadosCadastro.status;
+    !dadosCadastro.senha;
 
   return (
     <VStack spacing={4} align="flex-start" w="full">
       <VStack align="flex-start">
-        <Heading>Bibliotecad</Heading>
+        <Heading>Bibliotecad 📚</Heading>
         <Text fontSize="xl">Realize o cadastro</Text>
       </VStack>
 
@@ -168,7 +162,7 @@ export const Cadastro = () => {
           }
         >
           {tiposUsuario?.map((tipo) => (
-            <option value={tipo.id}>{tipo.descricao}</option>
+            <option value={tipo.idTipoUsuario}>{tipo.descricao}</option>
           ))}
         </Select>
       </FormControl>
@@ -187,24 +181,6 @@ export const Cadastro = () => {
             })
           }
         />
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>Status:</FormLabel>
-        <RadioGroup
-          value={dadosCadastro.status?.toString()}
-          onChange={(valorSelecionado) => {
-            setDadosCadastro({
-              ...dadosCadastro,
-              status: Number(valorSelecionado),
-            });
-          }}
-        >
-          <Stack direction="column">
-            <Radio value="1">Ativo</Radio>
-            <Radio value="2">Desativado</Radio>
-          </Stack>
-        </RadioGroup>
       </FormControl>
 
       <Button
