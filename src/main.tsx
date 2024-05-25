@@ -2,9 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { Center, ChakraProvider } from "@chakra-ui/react";
+import { Card, Center, ChakraProvider } from "@chakra-ui/react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Cadastro, Erro, Login, Menu } from "./features/index.ts";
+import { MinhaReserva } from "./features/MinhaReserva/views/MinhaReserva.tsx";
+import { AppWrapper } from "./shared/components/index.ts";
 
 const router = createBrowserRouter([
   {
@@ -27,14 +29,19 @@ const router = createBrowserRouter([
     element: <Menu />,
     errorElement: <Erro />,
   },
+  {
+    path: "/minha-reserva",
+    element: <MinhaReserva />,
+    errorElement: <Erro />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ChakraProvider>
-      <Center h="calc(100vh)" w="calc(100vw)">
+      <AppWrapper>
         <RouterProvider router={router} />
-      </Center>
+      </AppWrapper>
     </ChakraProvider>
   </React.StrictMode>
 );
