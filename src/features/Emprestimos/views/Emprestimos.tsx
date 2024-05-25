@@ -1,12 +1,12 @@
 import {
   Box,
   Button,
+  Heading,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import { TabelaEmprestimos } from "./TabelaEmprestimos";
@@ -19,7 +19,7 @@ export const Emprestimos = () => {
   return (
     <Box>
       <VStack spacing={4} align="flex-start" w="full">
-        <Text fontSize="xl">Empréstimos</Text>
+        <Heading size="md">Empréstimos</Heading>
         <Tabs variant="enclosed">
           <TabList>
             <Tab>A vencer</Tab>

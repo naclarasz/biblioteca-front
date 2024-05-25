@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../../../shared/api/api";
 import {
-  Box,
   Button,
   FormControl,
   FormLabel,
@@ -11,7 +10,6 @@ import {
   RadioGroup,
   Select,
   Stack,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
@@ -85,10 +83,7 @@ export const DadosPessoais = () => {
 
   return (
     <VStack spacing={4} align="flex-start" w="full">
-      <VStack align="flex-start">
-        <Heading>Sistema Bibliotecário</Heading>
-        <Text fontSize="xl">Atualize seus dados</Text>
-      </VStack>
+      <Heading size="md">Atualize seus dados</Heading>
 
       <FormControl>
         <FormLabel>Nome:</FormLabel>
