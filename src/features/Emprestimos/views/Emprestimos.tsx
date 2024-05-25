@@ -13,9 +13,66 @@ import { TabelaEmprestimos } from "./TabelaEmprestimos";
 import { useNavigate } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
 import { TipoEmprestimoEnum } from "../enums/EmprestimosEnums";
+import { useEffect, useState } from "react";
+import { IEmprestimo } from "../../../shared";
+import api from "../../../shared/api/api";
 
 export const Emprestimos = () => {
   const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
+
+  const [emprestimosVencidos, setEmprestimosVencidos] = useState<IEmprestimo[]>(
+    []
+  );
+  const [emprestimosAVencer, setEmprestimosAVencer] = useState<IEmprestimo[]>(
+    []
+  );
+  const [emprestimosEntregues, setEmprestimosEntregues] = useState<
+    IEmprestimo[]
+  >([]);
+
+  useEffect(() => {
+    listarTodosEmprestimos();
+  }, []);
+
+  const listarEmprestimosVencidos = async () => {
+    try {
+      const res = await api.get("/Emprestimo/ListarVencidos");
+      setEmprestimosVencidos(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const listarEmprestimosAVencer = async () => {
+    try {
+      const res = await api.get("/Emprestimo/ListarPendentes");
+      setEmprestimosAVencer(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const listarEmprestimosEntregues = async () => {
+    try {
+      const res = await api.get("/Emprestimo/ListarEntregues");
+      setEmprestimosEntregues(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const listarTodosEmprestimos = async () => {
+    setLoading(true);
+    Promise.all([
+      listarEmprestimosVencidos(),
+      listarEmprestimosAVencer(),
+      listarEmprestimosEntregues(),
+    ]).finally(() => {
+      setLoading(false);
+    });
+  };
 
   return (
     <Box>
@@ -30,15 +87,28 @@ export const Emprestimos = () => {
 
           <TabPanels>
             <TabPanel>
-              <TabelaEmprestimos tipoEmprestimo={TipoEmprestimoEnum.A_VENCER} />
+              {emprestimosAVencer && (
+                <TabelaEmprestimos
+                  tipoEmprestimo={TipoEmprestimoEnum.A_VENCER}
+                  emprestimos={emprestimosAVencer}
+                />
+              )}
             </TabPanel>
             <TabPanel>
-              <TabelaEmprestimos tipoEmprestimo={TipoEmprestimoEnum.VENCIDOS} />
+              {emprestimosVencidos && (
+                <TabelaEmprestimos
+                  tipoEmprestimo={TipoEmprestimoEnum.VENCIDOS}
+                  emprestimos={emprestimosVencidos}
+                />
+              )}
             </TabPanel>
             <TabPanel>
-              <TabelaEmprestimos
-                tipoEmprestimo={TipoEmprestimoEnum.ENTREGUES}
-              />
+              {emprestimosEntregues && (
+                <TabelaEmprestimos
+                  tipoEmprestimo={TipoEmprestimoEnum.ENTREGUES}
+                  emprestimos={emprestimosEntregues}
+                />
+              )}
             </TabPanel>
           </TabPanels>
         </Tabs>

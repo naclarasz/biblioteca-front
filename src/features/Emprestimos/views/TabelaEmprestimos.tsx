@@ -12,11 +12,14 @@ import {
 } from "@chakra-ui/react";
 import { TipoEmprestimoEnum } from "../enums/EmprestimosEnums";
 import { ModalDataEmprestimo } from "./ModalDataEmprestimo";
+import { IEmprestimo } from "../../../shared";
 
 export const TabelaEmprestimos = ({
   tipoEmprestimo,
+  emprestimos,
 }: {
   tipoEmprestimo: TipoEmprestimoEnum;
+  emprestimos: IEmprestimo[];
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -44,14 +47,18 @@ export const TabelaEmprestimos = ({
     }
   };
 
+  const renderizarDataFormatada = (data: Date) => {
+    return new Date(data).toLocaleDateString();
+  };
+
   return (
     <>
       <TableContainer minW="100%">
         <Table variant="simple">
           <Thead>
             <Tr>
-              <Th>Nome do livro</Th>
-              <Th>Reponsável</Th>
+              <Th>ID do livro</Th>
+              <Th>ID do responsável</Th>
               {tipoEmprestimo === TipoEmprestimoEnum.ENTREGUES ? (
                 <Th>Entregue em</Th>
               ) : (
@@ -61,24 +68,18 @@ export const TabelaEmprestimos = ({
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td>Nome do livro</Td>
-              <Td>Ana</Td>
-              <Td>01/01/2024</Td>
-              {renderizarAcoes()}
-            </Tr>
-            <Tr>
-              <Td>Nome do livro</Td>
-              <Td>Ana</Td>
-              <Td>01/01/2024</Td>
-              {renderizarAcoes()}
-            </Tr>
-            <Tr>
-              <Td>Nome do livro</Td>
-              <Td>Ana</Td>
-              <Td>01/01/2024</Td>
-              {renderizarAcoes()}
-            </Tr>
+            {emprestimos?.map((emprestimo) => (
+              <Tr key={emprestimo.idEmprestimo}>
+                <Td>{emprestimo.idLivro}</Td>
+                <Td>{emprestimo.idUsuarioEmp}</Td>
+                <Td>
+                  {tipoEmprestimo === TipoEmprestimoEnum.ENTREGUES
+                    ? renderizarDataFormatada(emprestimo.dataDevolucao)
+                    : renderizarDataFormatada(emprestimo.dataDevolucaoPrevista)}
+                </Td>
+                {renderizarAcoes()}
+              </Tr>
+            ))}
           </Tbody>
         </Table>
       </TableContainer>
