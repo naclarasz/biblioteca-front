@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  HStack,
   Heading,
   Spinner,
   Tab,
@@ -9,6 +10,7 @@ import {
   TabPanels,
   Tabs,
   VStack,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { TabelaEmprestimos } from "./TabelaEmprestimos";
 import { useNavigate } from "react-router-dom";
@@ -17,9 +19,11 @@ import { TipoEmprestimoEnum } from "../enums/EmprestimosEnums";
 import { useEffect, useState } from "react";
 import { IEmprestimo } from "../../../shared";
 import api from "../../../shared/api/api";
+import { ModalNovoEmprestimo } from "./ModalNovoEmprestimo";
 
 export const Emprestimos = () => {
   const navigate = useNavigate();
+  const { onOpen, isOpen, onClose } = useDisclosure();
 
   const [loading, setLoading] = useState(false);
 
@@ -117,17 +121,23 @@ export const Emprestimos = () => {
             </TabPanels>
           </Tabs>
         )}
-        <Button
-          leftIcon={<BsArrowLeft />}
-          colorScheme="blue"
-          variant="link"
-          onClick={() => {
-            navigate("/");
-          }}
-        >
-          Voltar para o menu
-        </Button>
+        <HStack justifyContent="space-between" w="100%">
+          <Button
+            leftIcon={<BsArrowLeft />}
+            colorScheme="blue"
+            variant="link"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Voltar para o menu
+          </Button>
+          <Button colorScheme="blue" onClick={onOpen}>
+            Adicionar empréstimo
+          </Button>
+        </HStack>
       </VStack>
+      <ModalNovoEmprestimo isOpen={isOpen} onClose={onClose} />
     </Box>
   );
 };

@@ -50,11 +50,10 @@ export const ModalDataEmprestimo = ({
     try {
       const payload: IEmprestimoAtualizar = {
         ...emprestimo,
-        dataDevolucaoPrevista: new Date(convertDate(novaData)).toISOString(),
+        dataDevolucaoPrevista: new Date(converterData(novaData)).toISOString(),
         dataEmprestimo: new Date(emprestimo.dataEmprestimo).toISOString(),
         dataDevolucao: new Date(emprestimo.dataDevolucao).toISOString(),
       };
-      console.log(payload);
       await api.put("/Emprestimo/Editar", payload);
       setDataSalva(novaData);
     } catch (error) {
@@ -63,14 +62,10 @@ export const ModalDataEmprestimo = ({
     setLoading(false);
   };
 
-  //convert dd/mm/yyyy to yyyy-mm-dd
-  const convertDate = (date: string) => {
+  const converterData = (date: string) => {
     const [dia, mes, ano] = date.split("/");
-    console.log(`${ano}-${mes}-${dia}`);
     return `${ano}-${mes}-${dia}`;
   };
-
-  console.log(new Date(convertDate(novaData)).toISOString());
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
