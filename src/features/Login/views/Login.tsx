@@ -14,13 +14,13 @@ import {
 import { Link } from "react-router-dom";
 
 interface IDadosLogin {
-  matricula: string;
+  email: string;
   senha: string;
 }
 
 export const Login = () => {
   const [dadosLogin, setDadosLogin] = useState<IDadosLogin>({
-    matricula: "",
+    email: "",
     senha: "",
   });
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,7 +29,7 @@ export const Login = () => {
     try {
       setLoading(true);
       const payload = {
-        idUsuario: dadosLogin.matricula,
+        email: dadosLogin.email,
         senha: dadosLogin.senha,
       };
       await API.post("/Usuario/Login", payload);
@@ -40,7 +40,7 @@ export const Login = () => {
     }
   };
 
-  const loginDeveEstarDesabilitado = !dadosLogin.matricula || !dadosLogin.senha;
+  const loginDeveEstarDesabilitado = !dadosLogin.email || !dadosLogin.senha;
 
   return (
     <Center h="calc(100vh)" w="calc(100vw)">
@@ -61,13 +61,13 @@ export const Login = () => {
           </VStack>
 
           <FormControl>
-            <FormLabel>Matrícula:</FormLabel>
+            <FormLabel>E-mail:</FormLabel>
             <Input
               rounded="none"
               variant="filled"
-              value={dadosLogin.matricula}
+              value={dadosLogin.email}
               onChange={(e) =>
-                setDadosLogin({ ...dadosLogin, matricula: e.target.value })
+                setDadosLogin({ ...dadosLogin, email: e.target.value })
               }
             />
           </FormControl>
