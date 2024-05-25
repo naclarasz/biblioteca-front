@@ -2,14 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { ChakraProvider } from "@chakra-ui/react";
+import { Center, ChakraProvider } from "@chakra-ui/react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Cadastro, Erro, Login } from "./features/index.ts";
+import { Cadastro, Erro, Login, Menu } from "./features/index.ts";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Login />,
     errorElement: <Erro />,
   },
   {
@@ -22,12 +22,19 @@ const router = createBrowserRouter([
     element: <Cadastro />,
     errorElement: <Erro />,
   },
+  {
+    path: "/menu",
+    element: <Menu />,
+    errorElement: <Erro />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ChakraProvider>
-      <RouterProvider router={router} />
+      <Center h="calc(100vh)" w="calc(100vw)">
+        <RouterProvider router={router} />
+      </Center>
     </ChakraProvider>
   </React.StrictMode>
 );

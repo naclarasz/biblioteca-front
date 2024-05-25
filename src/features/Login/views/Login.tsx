@@ -3,7 +3,6 @@ import API from "../../../shared/api/api";
 import {
   Box,
   Button,
-  Center,
   FormControl,
   FormLabel,
   Heading,
@@ -43,61 +42,59 @@ export const Login = () => {
   const loginDeveEstarDesabilitado = !dadosLogin.email || !dadosLogin.senha;
 
   return (
-    <Center h="calc(100vh)" w="calc(100vw)">
-      <Box
-        w={["full", "md"]}
-        p={[8, 10]}
-        mt={[20, "10vh"]}
-        mb={[20, "10vh"]}
-        mx="auto"
-        border={["none", "1px"]}
-        borderColor={["", "gray.300"]}
-        borderRadius={10}
-      >
-        <VStack spacing={4} align="flex-start" w="full">
-          <VStack align="flex-start">
-            <Heading>Sistema Bibliotecário</Heading>
-            <Text fontSize="xl">Realize o login</Text>
-          </VStack>
-
-          <FormControl>
-            <FormLabel>E-mail:</FormLabel>
-            <Input
-              rounded="none"
-              variant="filled"
-              value={dadosLogin.email}
-              onChange={(e) =>
-                setDadosLogin({ ...dadosLogin, email: e.target.value })
-              }
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Senha:</FormLabel>
-            <Input
-              rounded="none"
-              variant="filled"
-              type="password"
-              value={dadosLogin.senha}
-              onChange={(e) =>
-                setDadosLogin({ ...dadosLogin, senha: e.target.value })
-              }
-            />
-          </FormControl>
-          <Button
-            rounded="none"
-            colorScheme="blue"
-            w="full"
-            onClick={realizarLogin}
-            isDisabled={loginDeveEstarDesabilitado}
-            isLoading={loading}
-          >
-            Login
-          </Button>
-          <Button variant="link" colorScheme="blue">
-            <Link to="/cadastro">Não tem uma conta? Realize o cadastro</Link>
-          </Button>
+    <Box
+      w={["full", "md"]}
+      p={[8, 10]}
+      mt={[20, "10vh"]}
+      mb={[20, "10vh"]}
+      mx="auto"
+      border={["none", "1px"]}
+      borderColor={["", "gray.300"]}
+      borderRadius={10}
+    >
+      <VStack spacing={4} align="flex-start" w="full">
+        <VStack align="flex-start">
+          <Heading>Sistema Bibliotecário</Heading>
+          <Text fontSize="xl">Realize o login</Text>
         </VStack>
-      </Box>
-    </Center>
+
+        <FormControl>
+          <FormLabel>E-mail:</FormLabel>
+          <Input
+            rounded="none"
+            variant="filled"
+            value={dadosLogin.email}
+            onChange={(e) =>
+              setDadosLogin({ ...dadosLogin, email: e.target.value })
+            }
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Senha:</FormLabel>
+          <Input
+            rounded="none"
+            variant="filled"
+            type="password"
+            value={dadosLogin.senha}
+            onChange={(e) =>
+              setDadosLogin({ ...dadosLogin, senha: e.target.value })
+            }
+          />
+        </FormControl>
+        <Button
+          rounded="none"
+          colorScheme="blue"
+          w="full"
+          onClick={realizarLogin}
+          isDisabled={loginDeveEstarDesabilitado}
+          isLoading={loading}
+        >
+          Login
+        </Button>
+        <Button variant="link" colorScheme="blue">
+          <Link to="/cadastro">Não tem uma conta? Realize o cadastro</Link>
+        </Button>
+      </VStack>
+    </Box>
   );
 };
