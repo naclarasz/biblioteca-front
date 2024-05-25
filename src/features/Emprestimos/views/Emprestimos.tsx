@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Heading,
+  Spinner,
   Tab,
   TabList,
   TabPanel,
@@ -78,40 +79,44 @@ export const Emprestimos = () => {
     <Box>
       <VStack spacing={4} align="flex-start" w="full">
         <Heading size="md">Empréstimos</Heading>
-        <Tabs variant="enclosed">
-          <TabList>
-            <Tab>A vencer</Tab>
-            <Tab>Vencidos</Tab>
-            <Tab>Entregues</Tab>
-          </TabList>
+        {loading ? (
+          <Spinner size="xl" alignSelf="center" />
+        ) : (
+          <Tabs variant="enclosed">
+            <TabList>
+              <Tab>A vencer</Tab>
+              <Tab>Vencidos</Tab>
+              <Tab>Entregues</Tab>
+            </TabList>
 
-          <TabPanels>
-            <TabPanel>
-              {emprestimosAVencer && (
-                <TabelaEmprestimos
-                  tipoEmprestimo={TipoEmprestimoEnum.A_VENCER}
-                  emprestimos={emprestimosAVencer}
-                />
-              )}
-            </TabPanel>
-            <TabPanel>
-              {emprestimosVencidos && (
-                <TabelaEmprestimos
-                  tipoEmprestimo={TipoEmprestimoEnum.VENCIDOS}
-                  emprestimos={emprestimosVencidos}
-                />
-              )}
-            </TabPanel>
-            <TabPanel>
-              {emprestimosEntregues && (
-                <TabelaEmprestimos
-                  tipoEmprestimo={TipoEmprestimoEnum.ENTREGUES}
-                  emprestimos={emprestimosEntregues}
-                />
-              )}
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+            <TabPanels>
+              <TabPanel>
+                {emprestimosAVencer && (
+                  <TabelaEmprestimos
+                    tipoEmprestimo={TipoEmprestimoEnum.A_VENCER}
+                    emprestimos={emprestimosAVencer}
+                  />
+                )}
+              </TabPanel>
+              <TabPanel>
+                {emprestimosVencidos && (
+                  <TabelaEmprestimos
+                    tipoEmprestimo={TipoEmprestimoEnum.VENCIDOS}
+                    emprestimos={emprestimosVencidos}
+                  />
+                )}
+              </TabPanel>
+              <TabPanel>
+                {emprestimosEntregues && (
+                  <TabelaEmprestimos
+                    tipoEmprestimo={TipoEmprestimoEnum.ENTREGUES}
+                    emprestimos={emprestimosEntregues}
+                  />
+                )}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        )}
         <Button
           leftIcon={<BsArrowLeft />}
           colorScheme="blue"
