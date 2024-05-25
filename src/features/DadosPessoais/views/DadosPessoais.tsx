@@ -214,7 +214,7 @@ export const DadosPessoais = () => {
         variant="link"
         colorScheme="blue"
         onClick={() => {
-          navigate("/menu");
+          navigate("/");
         }}
       >
         <Link to="/login">Voltar para o menu </Link>

@@ -47,7 +47,7 @@ export const Emprestimos = () => {
           colorScheme="blue"
           variant="link"
           onClick={() => {
-            navigate("/menu");
+            navigate("/");
           }}
         >
           Voltar para o menu

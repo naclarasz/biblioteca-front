@@ -49,7 +49,7 @@ export const MinhaReserva = () => {
         colorScheme="blue"
         variant="link"
         onClick={() => {
-          navigate("/menu");
+          navigate("/");
         }}
       >
         Voltar para o menu

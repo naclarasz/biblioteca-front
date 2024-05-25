@@ -1,5 +1,4 @@
 import { useState } from "react";
-import API from "../../../shared/api/api";
 import {
   Button,
   FormControl,
@@ -9,15 +8,12 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Link, useNavigate, useNavigation } from "react-router-dom";
-
-interface IDadosLogin {
-  email: string;
-  senha: string;
-}
+import { Link, useNavigate } from "react-router-dom";
+import { IDadosLogin, useAuth } from "../../../shared";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const { realizarLogin } = useAuth();
 
   const [dadosLogin, setDadosLogin] = useState<IDadosLogin>({
     email: "",
@@ -25,20 +21,13 @@ export const Login = () => {
   });
   const [loading, setLoading] = useState<boolean>(false);
 
-  const realizarLogin = async () => {
-    try {
-      setLoading(true);
-      const payload = {
-        email: dadosLogin.email,
-        senha: dadosLogin.senha,
-      };
-      await API.post("/Usuario/Login", payload);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      navigate("/menu");
-      setLoading(false);
+  const login = async () => {
+    setLoading(true);
+    const logado = await realizarLogin(dadosLogin);
+    if (logado) {
+      navigate("/");
     }
+    setLoading(false);
   };
 
   const loginDeveEstarDesabilitado = !dadosLogin.email || !dadosLogin.senha;
@@ -77,7 +66,7 @@ export const Login = () => {
         rounded="none"
         colorScheme="blue"
         w="full"
-        onClick={realizarLogin}
+        onClick={login}
         isDisabled={loginDeveEstarDesabilitado}
         isLoading={loading}
       >

@@ -1,12 +1,15 @@
 import { Button, Heading, Text, VStack } from "@chakra-ui/react";
 import { BsArrowLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../shared";
 
 export const Menu = () => {
   const navigate = useNavigate();
+  const { realizarLogout } = useAuth();
 
-  const fazerLogout = () => {
-    navigate("/login");
+  const logout = () => {
+    realizarLogout();
+    navigate("/login", { replace: true });
   };
 
   const MenuUsuario = () => (
@@ -73,7 +76,7 @@ export const Menu = () => {
     <VStack spacing={4} align="flex-start" w="full">
       <VStack align="flex-start">
         <Heading>Bibliotecad 📚</Heading>
-        <Text fontSize="xl">Bem vindo, Fulano!</Text>
+        <Text fontSize="xl">Bem vindo (a)!</Text>
       </VStack>
       {MenuAdmin()}
       <Button variant="link" colorScheme="blue" onClick={() => {}}>
@@ -83,7 +86,7 @@ export const Menu = () => {
         leftIcon={<BsArrowLeft />}
         variant="link"
         colorScheme="red"
-        onClick={fazerLogout}
+        onClick={logout}
       >
         Sair da conta
       </Button>
