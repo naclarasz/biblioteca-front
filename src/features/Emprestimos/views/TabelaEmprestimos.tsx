@@ -12,7 +12,9 @@ import {
 } from "@chakra-ui/react";
 import { TipoEmprestimoEnum } from "../enums/EmprestimosEnums";
 import { ModalDataEmprestimo } from "./ModalDataEmprestimo";
-import { IEmprestimo } from "../../../shared";
+import { IEmprestimo, formatarData } from "../../../shared";
+import api from "../../../shared/api/api";
+import { useState } from "react";
 
 export const TabelaEmprestimos = ({
   tipoEmprestimo,
@@ -23,13 +25,37 @@ export const TabelaEmprestimos = ({
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const renderizarAcoes = () => {
+  const [loading, setLoading] = useState(false);
+
+  const realizarEmprestimo = async (emprestimo: IEmprestimo) => {
+    setLoading(true);
+    try {
+      const payload: IEmprestimo = {
+        ...emprestimo,
+        dataDevolucao: new Date(),
+        devolvido: true,
+      };
+      await api.put("/Emprestimo/Editar", payload);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
+  const renderizarAcoes = (emprestimo?: IEmprestimo) => {
     if (tipoEmprestimo === TipoEmprestimoEnum.A_VENCER) {
       return (
         <td>
           <HStack>
             <Button onClick={onOpen}>Alterar data</Button>
-            <Button>Concluir empréstimo</Button>
+            {emprestimo && (
+              <Button
+                onClick={() => realizarEmprestimo(emprestimo)}
+                isLoading={loading}
+              >
+                Concluir empréstimo
+              </Button>
+            )}
           </HStack>
         </td>
       );
@@ -37,18 +63,21 @@ export const TabelaEmprestimos = ({
       return (
         <td>
           <HStack>
-            <Button>Alterar data</Button>
-            <Button onClick={onOpen}>Concluir empréstimo</Button>
+            <Button onClick={onOpen}>Alterar data</Button>
+            {emprestimo && (
+              <Button
+                onClick={() => realizarEmprestimo(emprestimo)}
+                isLoading={loading}
+              >
+                Concluir empréstimo
+              </Button>
+            )}
           </HStack>
         </td>
       );
     } else {
       return null;
     }
-  };
-
-  const renderizarDataFormatada = (data: Date) => {
-    return new Date(data).toLocaleDateString();
   };
 
   return (
@@ -69,21 +98,27 @@ export const TabelaEmprestimos = ({
           </Thead>
           <Tbody>
             {emprestimos?.map((emprestimo) => (
-              <Tr key={emprestimo.idEmprestimo}>
-                <Td>{emprestimo.idLivro}</Td>
-                <Td>{emprestimo.idUsuarioEmp}</Td>
-                <Td>
-                  {tipoEmprestimo === TipoEmprestimoEnum.ENTREGUES
-                    ? renderizarDataFormatada(emprestimo.dataDevolucao)
-                    : renderizarDataFormatada(emprestimo.dataDevolucaoPrevista)}
-                </Td>
-                {renderizarAcoes()}
-              </Tr>
+              <>
+                <ModalDataEmprestimo
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  emprestimo={emprestimo}
+                />
+                <Tr key={emprestimo.idEmprestimo}>
+                  <Td>{emprestimo.idLivro}</Td>
+                  <Td>{emprestimo.idUsuarioEmp}</Td>
+                  <Td>
+                    {tipoEmprestimo === TipoEmprestimoEnum.ENTREGUES
+                      ? formatarData(emprestimo.dataDevolucao)
+                      : formatarData(emprestimo.dataDevolucaoPrevista)}
+                  </Td>
+                  {renderizarAcoes(emprestimo)}
+                </Tr>
+              </>
             ))}
           </Tbody>
         </Table>
       </TableContainer>
-      <ModalDataEmprestimo isOpen={isOpen} onClose={onClose} />
     </>
   );
 };
