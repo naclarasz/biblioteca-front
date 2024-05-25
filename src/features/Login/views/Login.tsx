@@ -1,3 +1,6 @@
+import { useState } from "react";
+import axios from "axios";
+import API from "../../../shared";
 import {
   Box,
   Button,
@@ -9,33 +12,39 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
 
 interface ILoginData {
-  email: string;
+  matricula: string;
   senha: string;
 }
 
 export const Login = () => {
   const [dadosLogin, setDadosLogin] = useState<ILoginData>({
-    email: "",
+    matricula: "",
     senha: "",
   });
   const [loading, setLoading] = useState<boolean>(false);
 
-  const realizarLogin = () => {
-    setLoading(true);
-    setTimeout(() => {
-      //Chamar API de login
+  const realizarLogin = async () => {
+    try {
+      setLoading(true);
+      const payload = {
+        idUsuario: dadosLogin.matricula,
+        senha: dadosLogin.senha,
+      };
+      await API.post("/Usuario/Login", payload);
+    } catch (e) {
+      console.error(e);
+    } finally {
       setLoading(false);
-    }, 3000);
+    }
   };
 
   const realizarCadastro = () => {
     //redirecionar para tela de cadastro
   };
 
-  const loginDeveEstarDesabilitado = !dadosLogin.email || !dadosLogin.senha;
+  const loginDeveEstarDesabilitado = !dadosLogin.matricula || !dadosLogin.senha;
 
   return (
     <Center h="calc(100vh)" w="calc(100vw)">
@@ -55,13 +64,13 @@ export const Login = () => {
           </VStack>
 
           <FormControl>
-            <FormLabel>Endereço de e-mail:</FormLabel>
+            <FormLabel>Matrícula:</FormLabel>
             <Input
               rounded="none"
               variant="filled"
-              value={dadosLogin.email}
+              value={dadosLogin.matricula}
               onChange={(e) =>
-                setDadosLogin({ ...dadosLogin, email: e.target.value })
+                setDadosLogin({ ...dadosLogin, matricula: e.target.value })
               }
             />
           </FormControl>
