@@ -12,6 +12,7 @@ import {
 import { TabelaEmprestimos } from "./TabelaEmprestimos";
 import { useNavigate } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
+import { TipoEmprestimoEnum } from "../enums/EmprestimosEnums";
 
 export const Emprestimos = () => {
   const navigate = useNavigate();
@@ -29,13 +30,15 @@ export const Emprestimos = () => {
 
           <TabPanels>
             <TabPanel>
-              <TabelaEmprestimos />
+              <TabelaEmprestimos tipoEmprestimo={TipoEmprestimoEnum.A_VENCER} />
             </TabPanel>
             <TabPanel>
-              <TabelaEmprestimos />
+              <TabelaEmprestimos tipoEmprestimo={TipoEmprestimoEnum.VENCIDOS} />
             </TabPanel>
             <TabPanel>
-              <TabelaEmprestimos />
+              <TabelaEmprestimos
+                tipoEmprestimo={TipoEmprestimoEnum.ENTREGUES}
+              />
             </TabPanel>
           </TabPanels>
         </Tabs>

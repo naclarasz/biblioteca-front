@@ -1,51 +1,80 @@
 import {
+  Button,
+  HStack,
   Table,
-  TableCaption,
   TableContainer,
   Tbody,
   Td,
-  Tfoot,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { TipoEmprestimoEnum } from "../enums/EmprestimosEnums";
 
-export const TabelaEmprestimos = () => {
+export const TabelaEmprestimos = ({
+  tipoEmprestimo,
+}: {
+  tipoEmprestimo: TipoEmprestimoEnum;
+}) => {
+  const renderizarAcoes = () => {
+    if (tipoEmprestimo === TipoEmprestimoEnum.A_VENCER) {
+      return (
+        <td>
+          <HStack>
+            <Button>Alterar data</Button>
+            <Button>Concluir empréstimo</Button>
+          </HStack>
+        </td>
+      );
+    } else if (tipoEmprestimo === TipoEmprestimoEnum.VENCIDOS) {
+      return (
+        <td>
+          <HStack>
+            <Button>Alterar data</Button>
+            <Button>Concluir empréstimo</Button>
+          </HStack>
+        </td>
+      );
+    } else {
+      return null;
+    }
+  };
+
   return (
-    <TableContainer>
+    <TableContainer minW="100%">
       <Table variant="simple">
-        <TableCaption>Imperial to metric conversion factors</TableCaption>
         <Thead>
           <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
+            <Th>Nome do livro</Th>
+            <Th>Reponsável</Th>
+            {tipoEmprestimo === TipoEmprestimoEnum.ENTREGUES ? (
+              <Th>Entregue em</Th>
+            ) : (
+              <Th>Prazo</Th>
+            )}
+            {renderizarAcoes() && <Th>Ações</Th>}
           </Tr>
         </Thead>
         <Tbody>
           <Tr>
-            <Td>inches</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td>
+            <Td>Nome do livro</Td>
+            <Td>Ana</Td>
+            <Td>01/01/2024</Td>
+            {renderizarAcoes()}
           </Tr>
           <Tr>
-            <Td>feet</Td>
-            <Td>centimetres (cm)</Td>
-            <Td isNumeric>30.48</Td>
+            <Td>Nome do livro</Td>
+            <Td>Ana</Td>
+            <Td>01/01/2024</Td>
+            {renderizarAcoes()}
           </Tr>
           <Tr>
-            <Td>yards</Td>
-            <Td>metres (m)</Td>
-            <Td isNumeric>0.91444</Td>
+            <Td>Nome do livro</Td>
+            <Td>Ana</Td>
+            <Td>01/01/2024</Td>
+            {renderizarAcoes()}
           </Tr>
         </Tbody>
-        <Tfoot>
-          <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
-          </Tr>
-        </Tfoot>
       </Table>
     </TableContainer>
   );
