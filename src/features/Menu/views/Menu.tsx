@@ -64,7 +64,7 @@ export const Menu = () => {
         colorScheme="blue"
         w="full"
         onClick={() => {
-          navigate("/dados-pessoais");
+          navigate("/alterar-status-usuario");
         }}
       >
         Alterar status de um usuário

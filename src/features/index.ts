@@ -5,3 +5,4 @@ export * from "./Menu";
 export * from "./DadosPessoais";
 export * from "./Emprestimos";
 export * from "./MinhaReserva";
+export * from "./AlterarStatusUsuario";
