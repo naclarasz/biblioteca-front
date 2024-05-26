@@ -9,6 +9,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
   VStack,
   useDisclosure,
   useToast,
@@ -122,27 +123,33 @@ export const Emprestimos = () => {
 
             <TabPanels>
               <TabPanel>
-                {emprestimosAVencer && (
+                {emprestimosAVencer?.length > 0 ? (
                   <TabelaEmprestimos
                     tipoEmprestimo={TipoEmprestimoEnum.A_VENCER}
                     emprestimos={emprestimosAVencer}
                   />
+                ) : (
+                  <Text>Nenhum empréstimo a vencer</Text>
                 )}
               </TabPanel>
               <TabPanel>
-                {emprestimosVencidos && (
+                {emprestimosVencidos?.length > 0 ? (
                   <TabelaEmprestimos
                     tipoEmprestimo={TipoEmprestimoEnum.VENCIDOS}
                     emprestimos={emprestimosVencidos}
                   />
+                ) : (
+                  <Text>Nenhum empréstimo vencido</Text>
                 )}
               </TabPanel>
               <TabPanel>
-                {emprestimosEntregues && (
+                {emprestimosEntregues?.length > 0 ? (
                   <TabelaEmprestimos
                     tipoEmprestimo={TipoEmprestimoEnum.ENTREGUES}
                     emprestimos={emprestimosEntregues}
                   />
+                ) : (
+                  <Text>Nenhum empréstimo entregue</Text>
                 )}
               </TabPanel>
             </TabPanels>

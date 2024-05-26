@@ -102,7 +102,7 @@ export const TabelaEmprestimos = ({
   return (
     <>
       <TableContainer minW="100%">
-        <Table variant="simple">
+        <Table size="sm">
           <Thead>
             <Tr>
               <Th>ID do livro</Th>

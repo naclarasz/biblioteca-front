@@ -5,7 +5,6 @@ import {
   FormLabel,
   Heading,
   Input,
-  Text,
   VStack,
   useToast,
 } from "@chakra-ui/react";
@@ -59,8 +58,7 @@ export const AlterarSenhaUsuario = () => {
   return (
     <VStack spacing={4} align="flex-start" w="full">
       <VStack align="flex-start">
-        <Heading>Bibliotecad 📚</Heading>
-        <Text fontSize="xl">Alterar sua senha</Text>
+        <Heading size="md">Alterar sua senha</Heading>
       </VStack>
 
       <FormControl>

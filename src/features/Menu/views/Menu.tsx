@@ -1,15 +1,23 @@
-import { Button, Heading, Text, VStack } from "@chakra-ui/react";
+import { Button, Heading, Text, VStack, useToast } from "@chakra-ui/react";
 import { BsArrowLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { TiposUsuarioEnum, useAuth } from "../../../shared";
 
 export const Menu = () => {
   const navigate = useNavigate();
+  const toast = useToast();
   const { realizarLogout, dadosUsuarioLogado } = useAuth();
 
   const logout = () => {
     realizarLogout();
     navigate("/login", { replace: true });
+    toast({
+      title: "Você saiu da sua conta",
+      status: "info",
+      duration: 5000,
+      isClosable: true,
+      position: "top",
+    });
   };
 
   const MenuAdmin = () => (

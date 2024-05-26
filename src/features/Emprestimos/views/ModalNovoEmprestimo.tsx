@@ -62,7 +62,10 @@ export const ModalNovoEmprestimo = ({
   const toast = useToast();
 
   //TODO: Ajustar botao desabilitado
-  const botaoDesabilitado = false;
+  const botaoDesabilitado =
+    !dadosEmprestimo.idUsuarioEmp ||
+    !dadosEmprestimo.idLivro ||
+    !dadosEmprestimo.dataDevolucaoPrevista;
 
   const carregarUsuarios = useCallback(async () => {
     try {

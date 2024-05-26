@@ -7,7 +7,6 @@ import {
   RadioGroup,
   Select,
   Stack,
-  Text,
   VStack,
   useToast,
 } from "@chakra-ui/react";
@@ -93,8 +92,7 @@ export const AlterarStatusUsuario = () => {
     usuarios && (
       <VStack spacing={4} align="flex-start" w="full">
         <VStack align="flex-start">
-          <Heading>Bibliotecad 📚</Heading>
-          <Text fontSize="xl">Alterar o status de um usuário</Text>
+          <Heading size="md">Alterar o status de um usuário</Heading>
         </VStack>
 
         <FormControl>

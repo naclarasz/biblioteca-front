@@ -5,6 +5,7 @@ import {
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -15,10 +16,10 @@ import { ModalEditarLivro } from "./ModalEditarLivro";
 
 export const TabelaLivros = ({ livros }: { livros: IDadosLivro[] }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
-  return (
+  return livros.length > 0 ? (
     <>
       <TableContainer minW="100%">
-        <Table variant="simple">
+        <Table size="sm">
           <Thead>
             <Tr>
               <Th>ID do livro</Th>
@@ -59,5 +60,7 @@ export const TabelaLivros = ({ livros }: { livros: IDadosLivro[] }) => {
         </Table>
       </TableContainer>
     </>
+  ) : (
+    <Text>Nenhum livro cadastrado</Text>
   );
 };
