@@ -66,6 +66,7 @@ export const ModalDataEmprestimo = ({
         isClosable: true,
         position: "top",
       });
+      window.location.reload();
     } catch (error) {
       toast({
         title: "Erro ao alterar data de prazo",
