@@ -27,3 +27,21 @@ Axios é uma biblioteca JavaScript popular que pode ser usada para fazer solicit
 ## React Router DOM
 
 React Router DOM é a versão do React Router que é projetada para projetos web. Ele permite que você adicione navegação baseada em rotas ao seu aplicativo React.
+
+# Como rodar o projeto
+
+Para rodar o projeto, você precisa ter o Node.js instalado em sua máquina. Você pode baixá-lo [aqui](https://nodejs.org/).
+
+Após instalar o Node.js, você pode clonar o repositório e rodar o seguinte comando na raiz do projeto:
+
+```bash
+npm install
+```
+
+Após instalar as dependências, você pode rodar o seguinte comando para iniciar o projeto:
+
+```bash
+npm run dev
+```
+
+O projeto estará rodando em [http://localhost:5173](http://localhost:5173).
