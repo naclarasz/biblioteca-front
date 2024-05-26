@@ -13,7 +13,7 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import api from "../../../shared/api/api";
 import { IDadosLivro } from "../../../shared";
 
@@ -28,7 +28,6 @@ export const ModalEditarLivro = ({
 }) => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
-  const [botaoDesabilitado, setBotaoDesabilitado] = useState(true);
   const [dadosLivro, setDadosLivro] = useState<IDadosLivro>(livro);
 
   const editarLivro = async () => {
@@ -57,20 +56,13 @@ export const ModalEditarLivro = ({
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (
-      dadosLivro.titulo !== "" &&
-      dadosLivro.autor !== "" &&
-      dadosLivro.editora !== "" &&
-      dadosLivro.genero !== "" &&
-      dadosLivro.anoPublicacao.toString() !== "" &&
-      dadosLivro.copias.toString() !== ""
-    ) {
-      setBotaoDesabilitado(false);
-    } else {
-      setBotaoDesabilitado(true);
-    }
-  }, [dadosLivro]);
+  const botaoDesabilitado =
+    !dadosLivro.titulo ||
+    !dadosLivro.autor ||
+    !dadosLivro.editora ||
+    !dadosLivro.anoPublicacao ||
+    !dadosLivro.genero ||
+    !dadosLivro.copias;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
