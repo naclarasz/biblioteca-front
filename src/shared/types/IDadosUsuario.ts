@@ -3,6 +3,5 @@ export interface IDadosUsuario {
   nome: string;
   email: string;
   senha: string;
-  status: boolean;
   idTipoUsuario: number;
 }

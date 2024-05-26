@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import {
+  AlterarSenhaUsuario,
   AlterarStatusUsuario,
   Cadastro,
   DadosPessoais,
@@ -55,6 +56,14 @@ function App() {
           element={
             <ProtectedRoute>
               <AlterarStatusUsuario />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/alterar-senha-usuario"
+          element={
+            <ProtectedRoute>
+              <AlterarSenhaUsuario />
             </ProtectedRoute>
           }
         />

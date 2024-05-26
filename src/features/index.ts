@@ -6,3 +6,4 @@ export * from "./DadosPessoais";
 export * from "./Emprestimos";
 export * from "./MinhaReserva";
 export * from "./AlterarStatusUsuario";
+export * from "./AlterarSenhaUsuario";

@@ -79,7 +79,13 @@ export const Menu = () => {
         <Text fontSize="xl">Bem vindo(a), tenha uma boa leitura!</Text>
       </VStack>
       {MenuAdmin()}
-      <Button variant="link" colorScheme="blue" onClick={() => {}}>
+      <Button
+        variant="link"
+        colorScheme="blue"
+        onClick={() => {
+          navigate("/alterar-senha-usuario");
+        }}
+      >
         Alterar senha de acesso
       </Button>
       <Button
