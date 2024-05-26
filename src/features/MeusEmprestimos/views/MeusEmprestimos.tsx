@@ -13,14 +13,14 @@ import {
 import { BsArrowLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
-export const MinhaReserva = () => {
+export const MeusEmprestimos = () => {
   const navigate = useNavigate();
 
   return (
     <VStack spacing={4} align="flex-start" w="full">
       <Card w="100%">
         <CardHeader>
-          <Heading size="md">Minha reserva</Heading>
+          <Heading size="md">Meus emprestimos</Heading>
         </CardHeader>
 
         <CardBody>

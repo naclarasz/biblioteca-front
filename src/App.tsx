@@ -8,7 +8,7 @@ import {
   Erro,
   Login,
   Menu,
-  MinhaReserva,
+  MeusEmprestimos,
 } from "./features";
 import { ProtectedRoute } from "./shared/components/index.ts";
 import { AuthProvider } from "./shared/index.ts";
@@ -28,10 +28,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route
-          path="/minha-reserva"
+          path="/meus-emprestimos"
           element={
             <ProtectedRoute>
-              <MinhaReserva />{" "}
+              <MeusEmprestimos />{" "}
             </ProtectedRoute>
           }
         />
