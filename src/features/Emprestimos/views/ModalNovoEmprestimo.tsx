@@ -14,8 +14,9 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import api from "../../../shared/api/api";
+import { IDadosLivro } from "../../../shared";
 
 interface IEmprestimoCadastrar {
   idEmprestimo: number;
@@ -36,16 +37,6 @@ interface IDadosUsuario {
   idTipoUsuario: string;
   senha: string;
   status: number;
-}
-
-interface IDadosLivro {
-  idLivro: number;
-  titulo: string;
-  autor: string;
-  anoPublicacao: number;
-  editora: string;
-  genero: string;
-  copias: number;
 }
 
 export const ModalNovoEmprestimo = ({
@@ -70,11 +61,44 @@ export const ModalNovoEmprestimo = ({
 
   const toast = useToast();
 
+  //TODO: Ajustar botao desabilitado
   const botaoDesabilitado = false;
+
+  const carregarUsuarios = useCallback(async () => {
+    try {
+      const resposta = await api.get("/Usuario/Listar");
+      setUsuarios(resposta.data);
+    } catch (error) {
+      toast({
+        title: "Erro ao carregar usuários",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      console.log(error);
+    }
+  }, [toast]);
+
+  const carregarLivros = useCallback(async () => {
+    try {
+      const resposta = await api.get("/Livro/Listar");
+      setLivros(resposta.data);
+    } catch (error) {
+      toast({
+        title: "Erro ao carregar livros",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      console.log(error);
+    }
+  }, [toast]);
 
   useEffect(() => {
     Promise.all([carregarUsuarios(), carregarLivros()]);
-  }, []);
+  }, [carregarLivros, carregarUsuarios]);
 
   const converterData = (date: string) => {
     const [dia, mes, ano] = date.split("/");
@@ -112,38 +136,6 @@ export const ModalNovoEmprestimo = ({
       });
     }
     setLoading(false);
-  };
-
-  const carregarUsuarios = async () => {
-    try {
-      const resposta = await api.get("/Usuario/Listar");
-      setUsuarios(resposta.data);
-    } catch (error) {
-      toast({
-        title: "Erro ao carregar usuários",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-      console.log(error);
-    }
-  };
-
-  const carregarLivros = async () => {
-    try {
-      const resposta = await api.get("/Livro/Listar");
-      setLivros(resposta.data);
-    } catch (error) {
-      toast({
-        title: "Erro ao carregar livros",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-      console.log(error);
-    }
   };
 
   return (
