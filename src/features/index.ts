@@ -4,6 +4,7 @@ export * from "./Erro";
 export * from "./Menu";
 export * from "./DadosPessoais";
 export * from "./Emprestimos";
-export * from "./MeusEmprestimos";
 export * from "./AlterarStatusUsuario";
 export * from "./AlterarSenhaUsuario";
+export * from "./Livros";
+export * from "./MeusEmprestimos";

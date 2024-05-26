@@ -6,6 +6,7 @@ import {
   DadosPessoais,
   Emprestimos,
   Erro,
+  Livros,
   Login,
   Menu,
   MeusEmprestimos,
@@ -48,6 +49,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Emprestimos />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/livros"
+          element={
+            <ProtectedRoute>
+              <Livros />
             </ProtectedRoute>
           }
         />

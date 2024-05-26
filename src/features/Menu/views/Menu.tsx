@@ -29,7 +29,7 @@ export const Menu = () => {
         colorScheme="blue"
         w="full"
         onClick={() => {
-          navigate("/dados-pessoais");
+          navigate("/livros");
         }}
       >
         Livros
