@@ -13,11 +13,11 @@ import { IDadosLogin, useAuth } from "../../../shared";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const { realizarLogin, tipoUsuarioLogado } = useAuth();
+  const { realizarLogin, dadosUsuarioLogado } = useAuth();
 
   useEffect(() => {
-    if (tipoUsuarioLogado) navigate("/");
-  }, [tipoUsuarioLogado, navigate]);
+    if (dadosUsuarioLogado?.idUsuario) navigate("/");
+  }, [dadosUsuarioLogado, navigate]);
 
   const [dadosLogin, setDadosLogin] = useState<IDadosLogin>({
     email: "",

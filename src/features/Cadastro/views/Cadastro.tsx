@@ -40,15 +40,15 @@ export const Cadastro = () => {
   const [tiposUsuario, setTiposUsuario] = useState<IDadosTipoUsuario[]>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { tipoUsuarioLogado } = useAuth();
+  const { dadosUsuarioLogado } = useAuth();
 
   useEffect(() => {
     buscarListaTiposUsuario();
   }, []);
 
   useEffect(() => {
-    if (tipoUsuarioLogado) navigate("/");
-  }, [tipoUsuarioLogado, navigate]);
+    if (dadosUsuarioLogado?.idUsuario) navigate("/");
+  }, [dadosUsuarioLogado, navigate]);
 
   const navegarLogin = () => {
     navigate("/login");

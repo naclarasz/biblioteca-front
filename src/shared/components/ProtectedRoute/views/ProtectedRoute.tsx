@@ -3,9 +3,9 @@ import { useAuth } from "../../../hooks";
 import { ReactNode } from "react";
 
 export const ProtectedRoute = ({ children }: { children: ReactNode }) => {
-  const { tipoUsuarioLogado } = useAuth();
+  const { dadosUsuarioLogado } = useAuth();
 
-  if (!tipoUsuarioLogado) {
+  if (!dadosUsuarioLogado?.idUsuario) {
     return <Navigate to="/login" />;
   }
   return children;

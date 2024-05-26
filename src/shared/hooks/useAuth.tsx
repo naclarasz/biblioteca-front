@@ -10,41 +10,41 @@ import { IDadosLogin } from "../types";
 import { useLocalStorage } from "./useLocalStorage";
 
 const AuthContext = createContext({
-  tipoUsuarioLogado: null,
-  realizarLogin: (dadosLogin: IDadosLogin) => Promise<boolean>,
+  dadosUsuarioLogado: { idUsuario: null, idTipoUsuario: null },
+  realizarLogin: async (dadosLogin: IDadosLogin) => false,
   realizarLogout: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [tipoUsuarioLogado, setTipoUsuarioLogado] = useLocalStorage(
-    "user",
-    null
-  );
+  const [dadosUsuarioLogado, setDadosUsuarioLogado] = useLocalStorage("user", {
+    idUsuario: null,
+    idTipoUsuario: null,
+  });
 
   const realizarLogin = useCallback(
     async (dadosLogin: IDadosLogin): Promise<boolean> => {
       try {
-        const tipoUsuario = await api.post("/Usuario/Login", dadosLogin);
-        setTipoUsuarioLogado(tipoUsuario);
+        const res = await api.post("/Usuario/Login", dadosLogin);
+        setDadosUsuarioLogado(res.data);
         return true;
       } catch (error) {
         return false;
       }
     },
-    [setTipoUsuarioLogado]
+    [setDadosUsuarioLogado]
   );
 
   const realizarLogout = useCallback(() => {
-    setTipoUsuarioLogado(null);
-  }, [setTipoUsuarioLogado]);
+    setDadosUsuarioLogado(null);
+  }, [setDadosUsuarioLogado]);
 
   const value = useMemo(
     () => ({
-      tipoUsuarioLogado,
+      dadosUsuarioLogado,
       realizarLogin,
       realizarLogout,
     }),
-    [realizarLogin, realizarLogout, tipoUsuarioLogado]
+    [realizarLogin, realizarLogout, dadosUsuarioLogado]
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

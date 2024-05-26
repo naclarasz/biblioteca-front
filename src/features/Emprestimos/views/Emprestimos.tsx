@@ -84,7 +84,7 @@ export const Emprestimos = () => {
       <VStack spacing={4} align="flex-start" w="full">
         <Heading size="md">Empréstimos</Heading>
         {loading ? (
-          <Spinner size="xl" alignSelf="centerP" />
+          <Spinner size="xl" alignSelf="center" />
         ) : (
           <Tabs variant="enclosed">
             <TabList>
