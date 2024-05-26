@@ -9,6 +9,7 @@ import {
   Stack,
   Text,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import api from "../../../shared/api/api";
 import { useEffect, useState } from "react";
@@ -29,6 +30,8 @@ export const AlterarStatusUsuario = () => {
   );
   const [status, setStatus] = useState<number>(0);
 
+  const toast = useToast();
+
   useEffect(() => {
     listarTodosUsuarios();
   }, []);
@@ -38,6 +41,13 @@ export const AlterarStatusUsuario = () => {
       const res = await api.get("/Usuario/Listar");
       setUsuarios(res.data);
     } catch (error) {
+      toast({
+        title: "Erro ao listar usuários",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.error(error);
     }
   };
@@ -50,7 +60,21 @@ export const AlterarStatusUsuario = () => {
         ...dadosUsuario,
         status: status,
       });
+      toast({
+        title: "Status do usuário alterado com sucesso",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
+      toast({
+        title: "Erro ao alterar status do usuário",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.error(error);
     }
     setLoading(false);

@@ -11,6 +11,7 @@ import {
   Tabs,
   VStack,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { TabelaEmprestimos } from "./TabelaEmprestimos";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +25,7 @@ import { ModalNovoEmprestimo } from "./ModalNovoEmprestimo";
 export const Emprestimos = () => {
   const navigate = useNavigate();
   const { onOpen, isOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
   const [loading, setLoading] = useState(false);
 
@@ -46,6 +48,13 @@ export const Emprestimos = () => {
       const res = await api.get("/Emprestimo/ListarVencidos");
       setEmprestimosVencidos(res.data);
     } catch (error) {
+      toast({
+        title: "Erro ao listar empréstimos vencidos",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.error(error);
     }
   };
@@ -55,6 +64,13 @@ export const Emprestimos = () => {
       const res = await api.get("/Emprestimo/ListarPendentes");
       setEmprestimosAVencer(res.data);
     } catch (error) {
+      toast({
+        title: "Erro ao listar empréstimos a vencer",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.error(error);
     }
   };
@@ -64,6 +80,13 @@ export const Emprestimos = () => {
       const res = await api.get("/Emprestimo/ListarEntregues");
       setEmprestimosEntregues(res.data);
     } catch (error) {
+      toast({
+        title: "Erro ao listar empréstimos entregues",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.error(error);
     }
   };

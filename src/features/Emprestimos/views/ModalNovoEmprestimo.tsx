@@ -12,6 +12,7 @@ import {
   ModalOverlay,
   Select,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import api from "../../../shared/api/api";
@@ -67,6 +68,8 @@ export const ModalNovoEmprestimo = ({
     devolvido: false,
   });
 
+  const toast = useToast();
+
   const botaoDesabilitado = false;
 
   useEffect(() => {
@@ -82,8 +85,22 @@ export const ModalNovoEmprestimo = ({
         dataDevolucao: null,
       });
       onClose();
+      toast({
+        title: "Empréstimo cadastrado com sucesso",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Erro ao cadastrar empréstimo",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
     }
     setLoading(false);
   };
@@ -93,6 +110,13 @@ export const ModalNovoEmprestimo = ({
       const resposta = await api.get("/Usuario/Listar");
       setUsuarios(resposta.data);
     } catch (error) {
+      toast({
+        title: "Erro ao carregar usuários",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(error);
     }
   };
@@ -102,6 +126,13 @@ export const ModalNovoEmprestimo = ({
       const resposta = await api.get("/Livro/Listar");
       setLivros(resposta.data);
     } catch (error) {
+      toast({
+        title: "Erro ao carregar livros",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(error);
     }
   };

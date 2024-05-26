@@ -8,6 +8,7 @@ import {
 import api from "../api/api";
 import { IDadosLogin } from "../types";
 import { useLocalStorage } from "./useLocalStorage";
+import { useToast } from "@chakra-ui/react";
 
 const AuthContext = createContext({
   dadosUsuarioLogado: { idUsuario: null, idTipoUsuario: null },
@@ -21,17 +22,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     idTipoUsuario: null,
   });
 
+  const toast = useToast();
+
   const realizarLogin = useCallback(
     async (dadosLogin: IDadosLogin): Promise<boolean> => {
       try {
         const res = await api.post("/Usuario/Login", dadosLogin);
         setDadosUsuarioLogado(res.data);
+        toast({
+          title: "Login realizado com sucesso",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "top",
+        });
         return true;
       } catch (error) {
+        toast({
+          title: "Erro ao realizar login",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top",
+        });
         return false;
       }
     },
-    [setDadosUsuarioLogado]
+    [setDadosUsuarioLogado, toast]
   );
 
   const realizarLogout = useCallback(() => {

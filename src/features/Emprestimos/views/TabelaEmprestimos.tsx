@@ -9,6 +9,7 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { TipoEmprestimoEnum } from "../enums/EmprestimosEnums";
 import { ModalDataEmprestimo } from "./ModalDataEmprestimo";
@@ -27,6 +28,8 @@ export const TabelaEmprestimos = ({
 
   const [loading, setLoading] = useState(false);
 
+  const toast = useToast();
+
   const realizarEmprestimo = async (emprestimo: IEmprestimo) => {
     setLoading(true);
     try {
@@ -36,8 +39,22 @@ export const TabelaEmprestimos = ({
         devolvido: true,
       };
       await api.put("/Emprestimo/Editar", payload);
+      toast({
+        title: "Empréstimo concluído",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Erro ao concluir empréstimo",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
     }
     setLoading(false);
   };

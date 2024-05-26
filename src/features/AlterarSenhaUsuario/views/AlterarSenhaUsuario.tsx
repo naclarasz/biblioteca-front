@@ -7,6 +7,7 @@ import {
   Input,
   Text,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { BsArrowLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +23,8 @@ export const AlterarSenhaUsuario = () => {
 
   const navigate = useNavigate();
 
+  const toast = useToast();
+
   const alterarSenha = async () => {
     setLoading(true);
     try {
@@ -32,7 +35,22 @@ export const AlterarSenhaUsuario = () => {
       });
 
       navigate("/");
+      toast({
+        title: "Senha alterada com sucesso",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
+      toast({
+        title: "Erro ao alterar senha",
+        description: "Verifique se a senha atual está correta",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.error(error);
     }
     setLoading(false);

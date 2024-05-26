@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { IEmprestimo, formatarData } from "../../../shared";
@@ -43,6 +44,8 @@ export const ModalDataEmprestimo = ({
     formatarData(emprestimo.dataDevolucaoPrevista)
   );
 
+  const toast = useToast();
+
   const botaoDesabilitado = novaData === dataSalva;
 
   const alterarDataPrazo = async () => {
@@ -56,7 +59,21 @@ export const ModalDataEmprestimo = ({
       };
       await api.put("/Emprestimo/Editar", payload);
       setDataSalva(novaData);
+      toast({
+        title: "Data de prazo alterada com sucesso",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
+      toast({
+        title: "Erro ao alterar data de prazo",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(error);
     }
     setLoading(false);
