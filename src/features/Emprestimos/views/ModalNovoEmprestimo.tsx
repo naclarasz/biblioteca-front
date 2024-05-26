@@ -76,12 +76,20 @@ export const ModalNovoEmprestimo = ({
     Promise.all([carregarUsuarios(), carregarLivros()]);
   }, []);
 
+  const converterData = (date: string) => {
+    const [dia, mes, ano] = date.split("/");
+    return `${ano}-${mes}-${dia}`;
+  };
+
   const cadastrarEmprestimo = async () => {
     setLoading(true);
     try {
       await api.post("/Emprestimo/Cadastrar", {
         ...dadosEmprestimo,
-        dataEmprestimo: null,
+        dataDevolucaoPrevista: new Date(
+          converterData(dadosEmprestimo.dataDevolucaoPrevista)
+        ).toISOString(),
+        dataEmprestimo: new Date().toISOString(),
         dataDevolucao: null,
       });
       onClose();
@@ -92,6 +100,7 @@ export const ModalNovoEmprestimo = ({
         isClosable: true,
         position: "top",
       });
+      window.location.reload();
     } catch (error) {
       console.log(error);
       toast({
