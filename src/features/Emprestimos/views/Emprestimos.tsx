@@ -17,7 +17,7 @@ import { TabelaEmprestimos } from "./TabelaEmprestimos";
 import { useNavigate } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
 import { TipoEmprestimoEnum } from "../enums/EmprestimosEnums";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IEmprestimo } from "../../../shared";
 import api from "../../../shared/api/api";
 import { ModalNovoEmprestimo } from "./ModalNovoEmprestimo";
@@ -39,11 +39,7 @@ export const Emprestimos = () => {
     IEmprestimo[]
   >([]);
 
-  useEffect(() => {
-    listarTodosEmprestimos();
-  }, []);
-
-  const listarEmprestimosVencidos = async () => {
+  const listarEmprestimosVencidos = useCallback(async () => {
     try {
       const res = await api.get("/Emprestimo/ListarVencidos");
       setEmprestimosVencidos(res.data);
@@ -57,9 +53,9 @@ export const Emprestimos = () => {
       });
       console.error(error);
     }
-  };
+  }, [toast]);
 
-  const listarEmprestimosAVencer = async () => {
+  const listarEmprestimosAVencer = useCallback(async () => {
     try {
       const res = await api.get("/Emprestimo/ListarPendentes");
       setEmprestimosAVencer(res.data);
@@ -73,9 +69,9 @@ export const Emprestimos = () => {
       });
       console.error(error);
     }
-  };
+  }, [toast]);
 
-  const listarEmprestimosEntregues = async () => {
+  const listarEmprestimosEntregues = useCallback(async () => {
     try {
       const res = await api.get("/Emprestimo/ListarEntregues");
       setEmprestimosEntregues(res.data);
@@ -89,9 +85,9 @@ export const Emprestimos = () => {
       });
       console.error(error);
     }
-  };
+  }, [toast]);
 
-  const listarTodosEmprestimos = async () => {
+  const listarTodosEmprestimos = useCallback(async () => {
     setLoading(true);
     Promise.all([
       listarEmprestimosVencidos(),
@@ -100,7 +96,15 @@ export const Emprestimos = () => {
     ]).finally(() => {
       setLoading(false);
     });
-  };
+  }, [
+    listarEmprestimosVencidos,
+    listarEmprestimosAVencer,
+    listarEmprestimosEntregues,
+  ]);
+
+  useEffect(() => {
+    listarTodosEmprestimos();
+  }, [listarTodosEmprestimos]);
 
   return (
     <Box>

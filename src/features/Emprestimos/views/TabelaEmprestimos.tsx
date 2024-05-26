@@ -61,6 +61,7 @@ export const TabelaEmprestimos = ({
   };
 
   const renderizarAcoes = (emprestimo?: IEmprestimo) => {
+    if (tipoEmprestimo === TipoEmprestimoEnum.MEUS_EMPRESTIMOS) return null;
     if (tipoEmprestimo === TipoEmprestimoEnum.A_VENCER) {
       return (
         <td>
@@ -105,13 +106,23 @@ export const TabelaEmprestimos = ({
           <Thead>
             <Tr>
               <Th>ID do livro</Th>
-              <Th>ID do responsável</Th>
+              {tipoEmprestimo !== TipoEmprestimoEnum.MEUS_EMPRESTIMOS ? (
+                <Th>ID do responsável</Th>
+              ) : (
+                <Th>Data do empréstimo</Th>
+              )}
               {tipoEmprestimo === TipoEmprestimoEnum.ENTREGUES ? (
                 <Th>Entregue em</Th>
               ) : (
-                <Th>Prazo</Th>
+                <Th>Prazo de devolução</Th>
               )}
               {renderizarAcoes() && <Th>Ações</Th>}
+              {tipoEmprestimo === TipoEmprestimoEnum.MEUS_EMPRESTIMOS && (
+                <>
+                  <Th>Devolvido</Th>
+                  <Th>Entregue em</Th>
+                </>
+              )}
             </Tr>
           </Thead>
           <Tbody>
@@ -124,12 +135,26 @@ export const TabelaEmprestimos = ({
                 />
                 <Tr key={emprestimo.idEmprestimo}>
                   <Td>{emprestimo.idLivro}</Td>
-                  <Td>{emprestimo.idUsuarioEmp}</Td>
+                  {tipoEmprestimo !== TipoEmprestimoEnum.MEUS_EMPRESTIMOS ? (
+                    <Td>{emprestimo.idUsuarioEmp}</Td>
+                  ) : (
+                    <Td>{formatarData(emprestimo.dataEmprestimo)}</Td>
+                  )}
                   <Td>
                     {tipoEmprestimo === TipoEmprestimoEnum.ENTREGUES
                       ? formatarData(emprestimo.dataDevolucao)
                       : formatarData(emprestimo.dataDevolucaoPrevista)}
                   </Td>
+                  {tipoEmprestimo === TipoEmprestimoEnum.MEUS_EMPRESTIMOS && (
+                    <>
+                      <Td>{emprestimo.devolvido ? "Sim" : "Não"}</Td>
+                      <Td>
+                        {emprestimo.devolvido
+                          ? formatarData(emprestimo.dataDevolucao)
+                          : "-"}
+                      </Td>
+                    </>
+                  )}
                   {renderizarAcoes(emprestimo)}
                 </Tr>
               </>

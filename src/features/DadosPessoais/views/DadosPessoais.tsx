@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import API from "../../../shared/api/api";
 import {
   Button,
@@ -11,9 +11,11 @@ import {
   Select,
   Stack,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
+import { useAuth } from "../../../shared";
 
 interface IDadosCadastro {
   nome: string;
@@ -21,7 +23,6 @@ interface IDadosCadastro {
   telefone: string;
   email: string;
   idTipoUsuario: string;
-  senha: string;
   status: number;
 }
 
@@ -31,42 +32,81 @@ interface IDadosTipoUsuario {
 }
 
 export const DadosPessoais = () => {
+  const { dadosUsuarioLogado } = useAuth();
   const [dadosCadastro, setDadosCadastro] = useState<IDadosCadastro>({
     nome: "",
     endereco: "",
     telefone: "",
     email: "",
     idTipoUsuario: "",
-    senha: "",
     status: 0,
   });
   const [tiposUsuario, setTiposUsuario] = useState<IDadosTipoUsuario[]>();
   const [loading, setLoading] = useState<boolean>(false);
+  const toast = useToast();
 
-  useEffect(() => {
-    buscarListaTiposUsuario();
-  }, []);
-
-  const navigate = useNavigate();
-
-  const buscarListaTiposUsuario = async () => {
+  const buscarDadosUsuario = useCallback(async () => {
     try {
       setLoading(true);
-      const resposta = await API.get("/TipoUsuario");
-      setTiposUsuario(resposta.data);
+      const resposta = await API.get(
+        `/Usuario/Obter/${dadosUsuarioLogado.idUsuario}`
+      );
+      setDadosCadastro(resposta.data);
     } catch (e) {
       console.error(e);
+      toast({
+        title: "Erro ao buscar os dados do usuário",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
     } finally {
       setLoading(false);
     }
-  };
+  }, [dadosUsuarioLogado.idUsuario, toast]);
+
+  const buscarListaTiposUsuario = useCallback(async () => {
+    try {
+      setLoading(true);
+      const resposta = await API.get("/TipoUsuario/Listar");
+      setTiposUsuario(resposta.data);
+    } catch (e) {
+      console.error(e);
+      toast({
+        title: "Erro ao buscar os tipos de usuário",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [toast]);
+
+  useEffect(() => {
+    Promise.all([buscarDadosUsuario(), buscarListaTiposUsuario()]);
+  }, [buscarDadosUsuario, buscarListaTiposUsuario]);
+
+  const navigate = useNavigate();
 
   const atualizarCadastro = async () => {
     try {
       setLoading(true);
-      await API.post("/Usuario", dadosCadastro);
+      await API.put("/Usuario/Editar", dadosCadastro);
+      toast({
+        title: "Cadastro atualizado com sucesso",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
     } catch (e) {
       console.error(e);
+      toast({
+        title: "Erro ao atualizar o cadastro",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
     } finally {
       setLoading(false);
     }
@@ -78,7 +118,6 @@ export const DadosPessoais = () => {
     !dadosCadastro.telefone ||
     !dadosCadastro.email ||
     !dadosCadastro.idTipoUsuario ||
-    !dadosCadastro.senha ||
     !dadosCadastro.status;
 
   return (
@@ -163,22 +202,6 @@ export const DadosPessoais = () => {
             <option value={tipo.id}>{tipo.descricao}</option>
           ))}
         </Select>
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>Senha:</FormLabel>
-        <Input
-          rounded="none"
-          variant="filled"
-          type="password"
-          value={dadosCadastro.senha}
-          onChange={(e) =>
-            setDadosCadastro({
-              ...dadosCadastro,
-              senha: e.target.value,
-            })
-          }
-        />
       </FormControl>
 
       <FormControl>
