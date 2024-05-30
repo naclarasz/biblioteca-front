@@ -6,10 +6,6 @@ import {
   FormLabel,
   Heading,
   Input,
-  Radio,
-  RadioGroup,
-  Select,
-  Stack,
   VStack,
   useToast,
 } from "@chakra-ui/react";
@@ -26,11 +22,6 @@ interface IDadosCadastro {
   status: number;
 }
 
-interface IDadosTipoUsuario {
-  id: number;
-  descricao: string;
-}
-
 export const DadosPessoais = () => {
   const { dadosUsuarioLogado } = useAuth();
   const [dadosCadastro, setDadosCadastro] = useState<IDadosCadastro>({
@@ -41,7 +32,6 @@ export const DadosPessoais = () => {
     idTipoUsuario: "",
     status: 0,
   });
-  const [tiposUsuario, setTiposUsuario] = useState<IDadosTipoUsuario[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
 
@@ -65,27 +55,9 @@ export const DadosPessoais = () => {
     }
   }, [dadosUsuarioLogado.idUsuario, toast]);
 
-  const buscarListaTiposUsuario = useCallback(async () => {
-    try {
-      setLoading(true);
-      const resposta = await API.get("/TipoUsuario/Listar");
-      setTiposUsuario(resposta.data);
-    } catch (e) {
-      console.error(e);
-      toast({
-        title: "Erro ao buscar os tipos de usuário",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, [toast]);
-
   useEffect(() => {
-    Promise.all([buscarDadosUsuario(), buscarListaTiposUsuario()]);
-  }, [buscarDadosUsuario, buscarListaTiposUsuario]);
+    Promise.all([buscarDadosUsuario()]);
+  }, [buscarDadosUsuario]);
 
   const navigate = useNavigate();
 
@@ -116,9 +88,7 @@ export const DadosPessoais = () => {
     !dadosCadastro.nome ||
     !dadosCadastro.endereco ||
     !dadosCadastro.telefone ||
-    !dadosCadastro.email ||
-    !dadosCadastro.idTipoUsuario ||
-    !dadosCadastro.status;
+    !dadosCadastro.email;
 
   return (
     <VStack spacing={4} align="flex-start" w="full">
@@ -182,44 +152,6 @@ export const DadosPessoais = () => {
             })
           }
         />
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>Tipo de usuário:</FormLabel>
-        <Select
-          placeholder="Selecione o tipo de usuário"
-          rounded="none"
-          variant="filled"
-          value={dadosCadastro.idTipoUsuario}
-          onChange={(e) =>
-            setDadosCadastro({
-              ...dadosCadastro,
-              idTipoUsuario: e.target.value,
-            })
-          }
-        >
-          {tiposUsuario?.map((tipo) => (
-            <option value={tipo.id}>{tipo.descricao}</option>
-          ))}
-        </Select>
-      </FormControl>
-
-      <FormControl>
-        <FormLabel>Status:</FormLabel>
-        <RadioGroup
-          value={dadosCadastro.status?.toString()}
-          onChange={(valorSelecionado) => {
-            setDadosCadastro({
-              ...dadosCadastro,
-              status: Number(valorSelecionado),
-            });
-          }}
-        >
-          <Stack direction="column">
-            <Radio value="1">Ativo</Radio>
-            <Radio value="2">Desativado</Radio>
-          </Stack>
-        </RadioGroup>
       </FormControl>
 
       <Button
