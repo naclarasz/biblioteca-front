@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { TipoEmprestimoEnum } from "../enums/EmprestimosEnums";
 import { ModalDataEmprestimo } from "./ModalDataEmprestimo";
-import { IEmprestimo, formatarData } from "../../../shared";
+import { IDadosEmprestimos, IEmprestimo, formatarData } from "../../../shared";
 import api from "../../../shared/api/api";
 import { useState } from "react";
 
@@ -22,7 +22,7 @@ export const TabelaEmprestimos = ({
   emprestimos,
 }: {
   tipoEmprestimo: TipoEmprestimoEnum;
-  emprestimos: IEmprestimo[];
+  emprestimos: IDadosEmprestimos[];
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -66,11 +66,14 @@ export const TabelaEmprestimos = ({
       return (
         <td>
           <HStack>
-            <Button onClick={onOpen}>Alterar data</Button>
+            <Button onClick={onOpen} size="sm">
+              Alterar data
+            </Button>
             {emprestimo && (
               <Button
                 onClick={() => realizarEmprestimo(emprestimo)}
                 isLoading={loading}
+                size="sm"
               >
                 Concluir empréstimo
               </Button>
@@ -82,11 +85,14 @@ export const TabelaEmprestimos = ({
       return (
         <td>
           <HStack>
-            <Button onClick={onOpen}>Alterar data</Button>
+            <Button size="sm" onClick={onOpen}>
+              Alterar data
+            </Button>
             {emprestimo && (
               <Button
                 onClick={() => realizarEmprestimo(emprestimo)}
                 isLoading={loading}
+                size="sm"
               >
                 Concluir empréstimo
               </Button>
@@ -105,9 +111,9 @@ export const TabelaEmprestimos = ({
         <Table size="sm">
           <Thead>
             <Tr>
-              <Th>ID do livro</Th>
+              <Th>Título do livro</Th>
               {tipoEmprestimo !== TipoEmprestimoEnum.MEUS_EMPRESTIMOS ? (
-                <Th>ID do responsável</Th>
+                <Th>Nome do responsável</Th>
               ) : (
                 <Th>Data do empréstimo</Th>
               )}
@@ -134,9 +140,9 @@ export const TabelaEmprestimos = ({
                   emprestimo={emprestimo}
                 />
                 <Tr key={emprestimo.idEmprestimo}>
-                  <Td>{emprestimo.idLivro}</Td>
+                  <Td>{emprestimo.nomeLivro}</Td>
                   {tipoEmprestimo !== TipoEmprestimoEnum.MEUS_EMPRESTIMOS ? (
-                    <Td>{emprestimo.idUsuarioEmp}</Td>
+                    <Td>{emprestimo.nomeUsuarioEmp}</Td>
                   ) : (
                     <Td>{formatarData(emprestimo.dataEmprestimo)}</Td>
                   )}

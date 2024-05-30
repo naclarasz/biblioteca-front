@@ -11,7 +11,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../../shared";
+import { TiposUsuarioEnum, useAuth } from "../../../shared";
 
 interface IDadosCadastro {
   nome: string;
@@ -20,11 +20,6 @@ interface IDadosCadastro {
   email: string;
   idTipoUsuario: string;
   senha: string;
-}
-
-interface IDadosTipoUsuario {
-  idTipoUsuario: number;
-  descricao: string;
 }
 
 export const Cadastro = () => {
@@ -37,14 +32,9 @@ export const Cadastro = () => {
     idTipoUsuario: "",
     senha: "",
   });
-  const [tiposUsuario, setTiposUsuario] = useState<IDadosTipoUsuario[]>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const { dadosUsuarioLogado } = useAuth();
-
-  useEffect(() => {
-    buscarListaTiposUsuario();
-  }, []);
 
   useEffect(() => {
     if (dadosUsuarioLogado?.idUsuario) navigate("/");
@@ -52,18 +42,6 @@ export const Cadastro = () => {
 
   const navegarLogin = () => {
     navigate("/login");
-  };
-
-  const buscarListaTiposUsuario = async () => {
-    try {
-      setLoading(true);
-      const resposta = await API.get("/TipoUsuario/Listar");
-      setTiposUsuario(resposta.data);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
   };
 
   const realizarCadastro = async () => {
@@ -167,9 +145,8 @@ export const Cadastro = () => {
             })
           }
         >
-          {tiposUsuario?.map((tipo) => (
-            <option value={tipo.idTipoUsuario}>{tipo.descricao}</option>
-          ))}
+          <option value={TiposUsuarioEnum.ALUNO}>Aluno</option>
+          <option value={TiposUsuarioEnum.PROFESSOR}>Professor</option>
         </Select>
       </FormControl>
 

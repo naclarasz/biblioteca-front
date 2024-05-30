@@ -1,9 +1,22 @@
-import { Button, Heading, Spinner, VStack, useToast } from "@chakra-ui/react";
+import {
+  Button,
+  Heading,
+  Spinner,
+  Text,
+  VStack,
+  useToast,
+} from "@chakra-ui/react";
 import { BsArrowLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import api from "../../../shared/api/api";
-import { IEmprestimo, useAuth } from "../../../shared";
-import { useCallback, useEffect, useState } from "react";
+import {
+  IDadosEmprestimos,
+  IDadosLivro,
+  IDadosUsuario,
+  IEmprestimo,
+  useAuth,
+} from "../../../shared";
+import { useEffect, useState } from "react";
 import { TabelaEmprestimos } from "../../Emprestimos/views/TabelaEmprestimos";
 import { TipoEmprestimoEnum } from "../../Emprestimos/enums/EmprestimosEnums";
 
@@ -12,20 +25,43 @@ export const MeusEmprestimos = () => {
   const toast = useToast();
   const { dadosUsuarioLogado } = useAuth();
 
-  const [meusEmprestimos, setMeusEmprestimos] = useState<IEmprestimo[]>([]);
   const [loading, setLoading] = useState(false);
+  const [dadosEmprestimos, setDadosEmprestimos] = useState<IDadosEmprestimos[]>(
+    []
+  );
 
-  const listarMeusEmprestimos = useCallback(async () => {
+  const listarDados = async () => {
     setLoading(true);
     try {
-      const res = await api.get(`/Emprestimo/Listar`);
+      const resUsuarios = await api.get("/Usuario/Listar");
+      const resLivros = await api.get("/Livro/Listar");
+      const resEmprestimos = await api.get("/Emprestimo/Listar");
 
-      const emprestimos = res.data as IEmprestimo[];
+      const usuarios = resUsuarios.data as IDadosUsuario[];
+      const livros = resLivros.data as IDadosLivro[];
+      const emprestimos = resEmprestimos.data as IEmprestimo[];
+
+      if (!usuarios || !livros || !emprestimos) return;
+
       const meusEmprestimos = emprestimos.filter(
         (e) => e.idUsuarioEmp === dadosUsuarioLogado.idUsuario
       );
 
-      setMeusEmprestimos(meusEmprestimos);
+      const empTodos = meusEmprestimos.map((emp) => {
+        const nomeLivro = livros.find(
+          (livro) => livro.idLivro === emp.idLivro
+        )?.titulo;
+        const nomeUsuarioEmp = usuarios.find(
+          (usuario) => usuario.idUsuario === emp.idUsuarioEmp
+        )?.nome;
+        return {
+          ...emp,
+          nomeLivro,
+          nomeUsuarioEmp,
+        } as IDadosEmprestimos;
+      });
+
+      setDadosEmprestimos(empTodos);
     } catch (error) {
       toast({
         title: "Erro ao listar meus empréstimos",
@@ -38,25 +74,30 @@ export const MeusEmprestimos = () => {
     }
 
     setLoading(false);
-  }, [dadosUsuarioLogado.idUsuario, toast]);
+  };
 
   useEffect(() => {
-    listarMeusEmprestimos();
-  }, [listarMeusEmprestimos]);
+    listarDados();
+  }, []);
 
-  console.log(meusEmprestimos);
+  const renderizarTabela = () => {
+    if (loading) return <Spinner size="xl" alignSelf="center" />;
+
+    if (dadosEmprestimos.length === 0)
+      return <Text>Nenhum empréstimo encontrado</Text>;
+
+    return (
+      <TabelaEmprestimos
+        emprestimos={dadosEmprestimos}
+        tipoEmprestimo={TipoEmprestimoEnum.MEUS_EMPRESTIMOS}
+      />
+    );
+  };
 
   return (
     <VStack spacing={4} align="flex-start" w="full">
       <Heading size="md">Meus empréstimos</Heading>
-      {loading ? (
-        <Spinner size="xl" alignSelf="center" />
-      ) : (
-        <TabelaEmprestimos
-          emprestimos={meusEmprestimos}
-          tipoEmprestimo={TipoEmprestimoEnum.MEUS_EMPRESTIMOS}
-        />
-      )}
+      {renderizarTabela()}
       <Button
         leftIcon={<BsArrowLeft />}
         colorScheme="blue"

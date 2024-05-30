@@ -3,16 +3,13 @@ import {
   FormControl,
   FormLabel,
   Heading,
-  Radio,
-  RadioGroup,
   Select,
-  Stack,
   VStack,
   useToast,
 } from "@chakra-ui/react";
 import api from "../../../shared/api/api";
-import { useEffect, useState } from "react";
-import { IDadosUsuario } from "../../../shared";
+import { useCallback, useEffect, useState } from "react";
+import { IDadosUsuario, TiposUsuarioEnum } from "../../../shared";
 import { BsArrowLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
@@ -27,15 +24,10 @@ export const AlterarStatusUsuario = () => {
   const [dadosUsuario, setDadosUsuario] = useState<IDadosUsuarioStatus | null>(
     null
   );
-  const [status, setStatus] = useState<number>(0);
 
   const toast = useToast();
 
-  useEffect(() => {
-    listarTodosUsuarios();
-  }, []);
-
-  const listarTodosUsuarios = async () => {
+  const listarTodosUsuarios = useCallback(async () => {
     try {
       const res = await api.get("/Usuario/Listar");
       setUsuarios(res.data);
@@ -49,16 +41,17 @@ export const AlterarStatusUsuario = () => {
       });
       console.error(error);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    listarTodosUsuarios();
+  }, [listarTodosUsuarios]);
 
   const alterarStatusUsuario = async () => {
     if (!dadosUsuario) return;
     setLoading(true);
     try {
-      await api.put("/Usuario/Editar", {
-        ...dadosUsuario,
-        status: status,
-      });
+      await api.put("/Usuario/Editar", dadosUsuario);
       toast({
         title: "Status do usuário alterado com sucesso",
         status: "success",
@@ -92,7 +85,7 @@ export const AlterarStatusUsuario = () => {
     usuarios && (
       <VStack spacing={4} align="flex-start" w="full">
         <VStack align="flex-start">
-          <Heading size="md">Alterar o status de um usuário</Heading>
+          <Heading size="md">Alterar o status/tipo de um usuário</Heading>
         </VStack>
 
         <FormControl>
@@ -116,20 +109,50 @@ export const AlterarStatusUsuario = () => {
         </FormControl>
 
         <FormControl>
-          <FormLabel>Status:</FormLabel>
-          <RadioGroup
+          <FormLabel>Tipo de usuário:</FormLabel>
+          <Select
+            placeholder="Selecione o tipo de usuário"
+            rounded="none"
+            variant="filled"
             isDisabled={!dadosUsuario}
-            value={status.toString()}
-            onChange={(valorSelecionado) => {
-              setStatus(Number(valorSelecionado));
+            value={dadosUsuario?.idTipoUsuario}
+            onChange={(e) => {
+              if (dadosUsuario) {
+                setDadosUsuario({
+                  ...dadosUsuario,
+                  idTipoUsuario: Number(e.target.value),
+                });
+              }
             }}
           >
-            <Stack direction="column">
-              <Radio value="1">Ativo</Radio>
+            <option value={TiposUsuarioEnum.ALUNO}>Aluno</option>
+            <option value={TiposUsuarioEnum.PROFESSOR}>Professor</option>
+            <option value={TiposUsuarioEnum.BIBLIOTECARIO}>
+              Bibliotecário
+            </option>
+          </Select>
+        </FormControl>
 
-              <Radio value="0">Inativo</Radio>
-            </Stack>
-          </RadioGroup>
+        <FormControl>
+          <FormLabel>Status:</FormLabel>
+          <Select
+            placeholder="Selecione o status do usuário"
+            rounded="none"
+            variant="filled"
+            isDisabled={!dadosUsuario}
+            value={dadosUsuario?.status}
+            onChange={(e) => {
+              if (dadosUsuario) {
+                setDadosUsuario({
+                  ...dadosUsuario,
+                  status: Number(e.target.value),
+                });
+              }
+            }}
+          >
+            <option value={1}>Ativo</option>
+            <option value={0}>Desativado</option>
+          </Select>
         </FormControl>
 
         <Button

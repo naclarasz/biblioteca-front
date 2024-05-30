@@ -47,10 +47,10 @@ export const Menu = () => {
         colorScheme="blue"
         w="full"
         onClick={() => {
-          navigate("/alterar-status-usuario");
+          navigate("/alterar-status-tipo-usuario");
         }}
       >
-        Alterar status de um usuário
+        Alterar status/tipo de um usuário
       </Button>
     </VStack>
   );

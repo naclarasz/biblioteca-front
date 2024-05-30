@@ -18,10 +18,21 @@ import { TabelaEmprestimos } from "./TabelaEmprestimos";
 import { useNavigate } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
 import { TipoEmprestimoEnum } from "../enums/EmprestimosEnums";
-import { useCallback, useEffect, useState } from "react";
-import { IEmprestimo } from "../../../shared";
+import { useEffect, useState } from "react";
+import {
+  IDadosEmprestimos,
+  IDadosLivro,
+  IDadosUsuario,
+  IEmprestimo,
+} from "../../../shared";
 import api from "../../../shared/api/api";
 import { ModalNovoEmprestimo } from "./ModalNovoEmprestimo";
+
+interface ITabelaEmprestimos {
+  emprestimosVencidos: IDadosEmprestimos[];
+  emprestimosAVencer: IDadosEmprestimos[];
+  emprestimosEntregues: IDadosEmprestimos[];
+}
 
 export const Emprestimos = () => {
   const navigate = useNavigate();
@@ -30,82 +41,97 @@ export const Emprestimos = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [emprestimosVencidos, setEmprestimosVencidos] = useState<IEmprestimo[]>(
-    []
-  );
-  const [emprestimosAVencer, setEmprestimosAVencer] = useState<IEmprestimo[]>(
-    []
-  );
-  const [emprestimosEntregues, setEmprestimosEntregues] = useState<
-    IEmprestimo[]
-  >([]);
-
-  const listarEmprestimosVencidos = useCallback(async () => {
-    try {
-      const res = await api.get("/Emprestimo/ListarVencidos");
-      setEmprestimosVencidos(res.data);
-    } catch (error) {
-      toast({
-        title: "Erro ao listar empréstimos vencidos",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-      console.error(error);
-    }
-  }, [toast]);
-
-  const listarEmprestimosAVencer = useCallback(async () => {
-    try {
-      const res = await api.get("/Emprestimo/ListarPendentes");
-      setEmprestimosAVencer(res.data);
-    } catch (error) {
-      toast({
-        title: "Erro ao listar empréstimos a vencer",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-      console.error(error);
-    }
-  }, [toast]);
-
-  const listarEmprestimosEntregues = useCallback(async () => {
-    try {
-      const res = await api.get("/Emprestimo/ListarEntregues");
-      setEmprestimosEntregues(res.data);
-    } catch (error) {
-      toast({
-        title: "Erro ao listar empréstimos entregues",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-      console.error(error);
-    }
-  }, [toast]);
-
-  const listarTodosEmprestimos = useCallback(async () => {
-    setLoading(true);
-    Promise.all([
-      listarEmprestimosVencidos(),
-      listarEmprestimosAVencer(),
-      listarEmprestimosEntregues(),
-    ]).finally(() => {
-      setLoading(false);
+  const [dadosTabelaEmprestimos, setDadosTabelaEmprestimos] =
+    useState<ITabelaEmprestimos>({
+      emprestimosVencidos: [],
+      emprestimosAVencer: [],
+      emprestimosEntregues: [],
     });
-  }, [
-    listarEmprestimosVencidos,
-    listarEmprestimosAVencer,
-    listarEmprestimosEntregues,
-  ]);
+
+  const listarDados = async () => {
+    setLoading(true);
+    try {
+      const resUsuarios = await api.get("/Usuario/Listar");
+      const resLivros = await api.get("/Livro/Listar");
+      const resVencidos = await api.get("/Emprestimo/ListarVencidos");
+      const resAVencer = await api.get("/Emprestimo/ListarPendentes");
+      const resEntregues = await api.get("/Emprestimo/ListarEntregues");
+
+      if (!resUsuarios.data || !resLivros.data) return;
+
+      const emprestimosVencidos = resVencidos.data.map(
+        (emprestimo: IEmprestimo) => {
+          const usuario = (resUsuarios.data as IDadosUsuario[])?.find(
+            (usuario) => usuario.idUsuario === emprestimo.idUsuarioEmp
+          );
+          const livro = (resLivros.data as IDadosLivro[])?.find(
+            (livro) => livro.idLivro === emprestimo.idLivro
+          );
+
+          return {
+            ...emprestimo,
+            nomeUsuarioEmp: usuario?.nome,
+            nomeLivro: livro?.titulo,
+          } as IDadosEmprestimos;
+        }
+      );
+
+      const emprestimosAVencer = resAVencer.data.map(
+        (emprestimo: IEmprestimo) => {
+          const usuario = (resUsuarios.data as IDadosUsuario[])?.find(
+            (usuario) => usuario.idUsuario === emprestimo.idUsuarioEmp
+          );
+          const livro = (resLivros.data as IDadosLivro[])?.find(
+            (livro) => livro.idLivro === emprestimo.idLivro
+          );
+
+          return {
+            ...emprestimo,
+            nomeUsuarioEmp: usuario?.nome,
+            nomeLivro: livro?.titulo,
+          } as IDadosEmprestimos;
+        }
+      );
+
+      const emprestimosEntregues = resEntregues.data.map(
+        (emprestimo: IEmprestimo) => {
+          const usuario = (resUsuarios.data as IDadosUsuario[])?.find(
+            (usuario) => usuario.idUsuario === emprestimo.idUsuarioEmp
+          );
+          const livro = (resLivros.data as IDadosLivro[])?.find(
+            (livro) => livro.idLivro === emprestimo.idLivro
+          );
+
+          return {
+            ...emprestimo,
+            nomeUsuarioEmp: usuario?.nome,
+            nomeLivro: livro?.titulo,
+          } as IDadosEmprestimos;
+        }
+      );
+
+      setDadosTabelaEmprestimos({
+        emprestimosVencidos,
+        emprestimosAVencer,
+        emprestimosEntregues,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao buscar empréstimos",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      console.error(error);
+    }
+
+    setLoading(false);
+  };
 
   useEffect(() => {
-    listarTodosEmprestimos();
-  }, [listarTodosEmprestimos]);
+    listarDados();
+  }, []);
 
   return (
     <Box>
@@ -123,30 +149,30 @@ export const Emprestimos = () => {
 
             <TabPanels>
               <TabPanel>
-                {emprestimosAVencer?.length > 0 ? (
+                {dadosTabelaEmprestimos.emprestimosAVencer?.length > 0 ? (
                   <TabelaEmprestimos
                     tipoEmprestimo={TipoEmprestimoEnum.A_VENCER}
-                    emprestimos={emprestimosAVencer}
+                    emprestimos={dadosTabelaEmprestimos.emprestimosAVencer}
                   />
                 ) : (
                   <Text>Nenhum empréstimo a vencer</Text>
                 )}
               </TabPanel>
               <TabPanel>
-                {emprestimosVencidos?.length > 0 ? (
+                {dadosTabelaEmprestimos.emprestimosVencidos?.length > 0 ? (
                   <TabelaEmprestimos
                     tipoEmprestimo={TipoEmprestimoEnum.VENCIDOS}
-                    emprestimos={emprestimosVencidos}
+                    emprestimos={dadosTabelaEmprestimos.emprestimosVencidos}
                   />
                 ) : (
                   <Text>Nenhum empréstimo vencido</Text>
                 )}
               </TabPanel>
               <TabPanel>
-                {emprestimosEntregues?.length > 0 ? (
+                {dadosTabelaEmprestimos.emprestimosEntregues?.length > 0 ? (
                   <TabelaEmprestimos
                     tipoEmprestimo={TipoEmprestimoEnum.ENTREGUES}
-                    emprestimos={emprestimosEntregues}
+                    emprestimos={dadosTabelaEmprestimos.emprestimosEntregues}
                   />
                 ) : (
                   <Text>Nenhum empréstimo entregue</Text>

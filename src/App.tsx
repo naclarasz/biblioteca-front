@@ -61,7 +61,7 @@ function App() {
           }
         />
         <Route
-          path="/alterar-status-usuario"
+          path="/alterar-status-tipo-usuario"
           element={
             <ProtectedRoute>
               <AlterarStatusUsuario />
