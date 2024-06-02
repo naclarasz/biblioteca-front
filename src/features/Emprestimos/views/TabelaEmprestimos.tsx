@@ -16,6 +16,7 @@ import { ModalDataEmprestimo } from "./ModalDataEmprestimo";
 import { IDadosEmprestimos, IEmprestimo, formatarData } from "../../../shared";
 import api from "../../../shared/api/api";
 import { useState } from "react";
+import React from "react";
 
 export const TabelaEmprestimos = ({
   tipoEmprestimo,
@@ -24,7 +25,14 @@ export const TabelaEmprestimos = ({
   tipoEmprestimo: TipoEmprestimoEnum;
   emprestimos: IDadosEmprestimos[];
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalState, setModalState] = useState([{}]);
+
+  const onOpenModal = (id: number) => {
+    setModalState((prev) => ({ ...prev, [id]: true }));
+  };
+  const onCloseModal = (id: number) => {
+    setModalState((prev) => ({ ...prev, [id]: false }));
+  };
 
   const [loading, setLoading] = useState(false);
 
@@ -61,47 +69,29 @@ export const TabelaEmprestimos = ({
   };
 
   const renderizarAcoes = (emprestimo?: IEmprestimo) => {
-    if (tipoEmprestimo === TipoEmprestimoEnum.MEUS_EMPRESTIMOS) return null;
-    if (tipoEmprestimo === TipoEmprestimoEnum.A_VENCER) {
-      return (
-        <td>
-          <HStack>
-            <Button onClick={onOpen} size="sm">
-              Alterar data
-            </Button>
-            {emprestimo && (
-              <Button
-                onClick={() => realizarEmprestimo(emprestimo)}
-                isLoading={loading}
-                size="sm"
-              >
-                Concluir empréstimo
+    switch (tipoEmprestimo) {
+      case TipoEmprestimoEnum.A_VENCER:
+      case TipoEmprestimoEnum.VENCIDOS:
+        return (
+          <td>
+            <HStack>
+              <Button onClick={() => emprestimo ? onOpenModal(emprestimo.idEmprestimo) : null} size="sm">
+                Alterar data de devolução prevista
               </Button>
-            )}
-          </HStack>
-        </td>
-      );
-    } else if (tipoEmprestimo === TipoEmprestimoEnum.VENCIDOS) {
-      return (
-        <td>
-          <HStack>
-            <Button size="sm" onClick={onOpen}>
-              Alterar data
-            </Button>
-            {emprestimo && (
-              <Button
-                onClick={() => realizarEmprestimo(emprestimo)}
-                isLoading={loading}
-                size="sm"
-              >
-                Concluir empréstimo
-              </Button>
-            )}
-          </HStack>
-        </td>
-      );
-    } else {
-      return null;
+              {emprestimo && (
+                <Button
+                  onClick={() => realizarEmprestimo(emprestimo)}
+                  isLoading={loading}
+                  size="sm"
+                >
+                  Concluir empréstimo
+                </Button>
+              )}
+            </HStack>
+          </td>
+        );
+      default:
+        return null;
     }
   };
 
@@ -132,11 +122,12 @@ export const TabelaEmprestimos = ({
             </Tr>
           </Thead>
           <Tbody>
-            {emprestimos?.map((emprestimo) => (
+            {emprestimos.map((emprestimo) => (                 
               <>
+                <React.Fragment key={emprestimo.idEmprestimo}/>
                 <ModalDataEmprestimo
-                  isOpen={isOpen}
-                  onClose={onClose}
+                  isOpen={!!modalState[emprestimo.idEmprestimo]}
+                  onClose={() => onCloseModal(emprestimo.idEmprestimo)}
                   emprestimo={emprestimo}
                 />
                 <Tr key={emprestimo.idEmprestimo}>

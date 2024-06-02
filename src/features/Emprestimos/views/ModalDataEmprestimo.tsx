@@ -22,7 +22,7 @@ interface IEmprestimoAtualizar {
   idUsuarioEmp: number;
   idLivro: number;
   dataEmprestimo: string;
-  dataDevolucao: string;
+  dataDevolucao: null;
   dataDevolucaoPrevista: string;
   devolvido: boolean;
 }
@@ -51,13 +51,12 @@ export const ModalDataEmprestimo = ({
   const alterarDataPrazo = async () => {
     setLoading(true);
     try {
-      const payload: IEmprestimoAtualizar = {
+      await api.put("/Emprestimo/Editar", {
         ...emprestimo,
         dataDevolucaoPrevista: new Date(converterData(novaData)).toISOString(),
         dataEmprestimo: new Date(emprestimo.dataEmprestimo).toISOString(),
-        dataDevolucao: new Date(emprestimo.dataDevolucao).toISOString(),
-      };
-      await api.put("/Emprestimo/Editar", payload);
+        dataDevolucao: null,
+      });
       setDataSalva(novaData);
       toast({
         title: "Data de prazo alterada com sucesso",
@@ -89,12 +88,12 @@ export const ModalDataEmprestimo = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Alterar data de prazo</ModalHeader>
+        <ModalHeader>Alterar data de devolução prevista</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Box>
             <FormControl>
-              <FormLabel>Data de empréstimo</FormLabel>
+              <FormLabel>Data</FormLabel>
               <Input
                 value={novaData}
                 onChange={(e) => setNovaData(e.target.value)}

@@ -15,6 +15,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../../../shared/api/api";
 import { IDadosLivro } from "../../../shared";
 
@@ -23,7 +24,7 @@ interface IEmprestimoCadastrar {
   idUsuarioEmp: number;
   idLivro: number;
   dataEmprestimo: string;
-  dataDevolucao: string;
+  dataDevolucao: null;
   dataDevolucaoPrevista: string;
   devolvido: boolean;
 }
@@ -54,7 +55,7 @@ export const ModalNovoEmprestimo = ({
     idUsuarioEmp: 0,
     idLivro: 0,
     dataEmprestimo: "",
-    dataDevolucao: "",
+    dataDevolucao: null,
     dataDevolucaoPrevista: "",
     devolvido: false,
   });
@@ -113,9 +114,7 @@ export const ModalNovoEmprestimo = ({
     try {
       await api.post("/Emprestimo/Cadastrar", {
         ...dadosEmprestimo,
-        dataDevolucaoPrevista: new Date(
-          converterData(dadosEmprestimo.dataDevolucaoPrevista)
-        ).toISOString(),
+        dataDevolucaoPrevista: new Date(converterData(dadosEmprestimo.dataDevolucaoPrevista)).toISOString(),
         dataEmprestimo: new Date().toISOString(),
         dataDevolucao: null,
       });
