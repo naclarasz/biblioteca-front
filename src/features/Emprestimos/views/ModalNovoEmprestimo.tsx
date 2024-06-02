@@ -85,7 +85,7 @@ export const ModalNovoEmprestimo = ({
 
   const carregarLivros = useCallback(async () => {
     try {
-      const resposta = await api.get("/Livro/Listar");
+      const resposta = await api.get("/Livro/ListarDisponiveis");
       setLivros(resposta.data);
     } catch (error) {
       toast({
