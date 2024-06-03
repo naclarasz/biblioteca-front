@@ -1,5 +1,5 @@
 # Escolha uma imagem base oficial do Node como ponto de partida
-FROM node:latest as build-stage
+FROM node:latest
 
 # Defina o diretório de trabalho no contêiner
 WORKDIR /app
