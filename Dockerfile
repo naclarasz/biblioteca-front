@@ -23,7 +23,7 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copie os arquivos estáticos gerados pelo comando de construção para o diretório do nginx
-COPY --from=build-stage /app/build /usr/share/nginx/html
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # Exponha a porta 80 para permitir o acesso ao contêiner
 EXPOSE 80
