@@ -10,14 +10,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
   VStack,
   useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../../../shared/api/api";
 import { IDadosLivro } from "../../../shared";
+import { CUIAutoComplete, Item } from "chakra-ui-autocomplete";
 
 interface IEmprestimoCadastrar {
   idEmprestimo: number;
@@ -114,7 +113,9 @@ export const ModalNovoEmprestimo = ({
     try {
       await api.post("/Emprestimo/Cadastrar", {
         ...dadosEmprestimo,
-        dataDevolucaoPrevista: new Date(converterData(dadosEmprestimo.dataDevolucaoPrevista)).toISOString(),
+        dataDevolucaoPrevista: new Date(
+          converterData(dadosEmprestimo.dataDevolucaoPrevista)
+        ).toISOString(),
         dataEmprestimo: new Date().toISOString(),
         dataDevolucao: null,
       });
@@ -149,43 +150,76 @@ export const ModalNovoEmprestimo = ({
         <ModalBody>
           <VStack spacing={4} align="flex-start" w="full">
             <FormControl>
-              <FormLabel>Nome:</FormLabel>
-              <Select
-                placeholder="Selecione o usuário"
-                rounded="none"
-                variant="filled"
-                value={dadosEmprestimo.idUsuarioEmp}
-                onChange={(e) =>
-                  setDadosEmprestimo({
-                    ...dadosEmprestimo,
-                    idUsuarioEmp: Number(e.target.value),
-                  })
+              <CUIAutoComplete
+                label="Usuário:"
+                placeholder="Digite o nome do usuário"
+                onSelectedItemsChange={(changes) => {
+                  if (changes.selectedItems) {
+                    setDadosEmprestimo({
+                      ...dadosEmprestimo,
+                      idUsuarioEmp: Number(
+                        changes.selectedItems[changes.selectedItems.length - 1]
+                          ?.value
+                      ),
+                    });
+                  }
+                }}
+                items={usuarios.map((usr) => {
+                  return {
+                    value: usr.idUsuario.toString(),
+                    label: usr.nome,
+                  } as Item;
+                })}
+                selectedItems={
+                  dadosEmprestimo.idUsuarioEmp
+                    ? [
+                        {
+                          value: dadosEmprestimo.idUsuarioEmp.toString(),
+                          label: usuarios.filter(
+                            (usr) =>
+                              usr.idUsuario === dadosEmprestimo.idUsuarioEmp
+                          )[0].nome,
+                        },
+                      ]
+                    : []
                 }
-              >
-                {usuarios?.map((usr) => (
-                  <option value={usr.idUsuario}>{usr.nome}</option>
-                ))}
-              </Select>
+              />
             </FormControl>
 
             <FormControl>
-              <FormLabel>Livro:</FormLabel>
-              <Select
-                placeholder="Selecione o livro"
-                rounded="none"
-                variant="filled"
-                value={dadosEmprestimo.idLivro}
-                onChange={(e) =>
-                  setDadosEmprestimo({
-                    ...dadosEmprestimo,
-                    idLivro: Number(e.target.value),
-                  })
+              <CUIAutoComplete
+                label="Livro:"
+                placeholder="Digite o título do livro"
+                onSelectedItemsChange={(changes) => {
+                  if (changes.selectedItems) {
+                    setDadosEmprestimo({
+                      ...dadosEmprestimo,
+                      idLivro: Number(
+                        changes.selectedItems[changes.selectedItems.length - 1]
+                          ?.value
+                      ),
+                    });
+                  }
+                }}
+                items={livros.map((livro) => {
+                  return {
+                    value: livro.idLivro.toString(),
+                    label: livro.titulo,
+                  } as Item;
+                })}
+                selectedItems={
+                  dadosEmprestimo.idLivro
+                    ? [
+                        {
+                          value: dadosEmprestimo.idLivro.toString(),
+                          label: livros.filter(
+                            (livro) => livro.idLivro === dadosEmprestimo.idLivro
+                          )[0].titulo,
+                        },
+                      ]
+                    : []
                 }
-              >
-                {livros?.map((livro) => (
-                  <option value={livro.idLivro}>{livro.titulo}</option>
-                ))}
-              </Select>
+              />
             </FormControl>
 
             <FormControl>

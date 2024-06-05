@@ -12,6 +12,7 @@ import { useCallback, useEffect, useState } from "react";
 import { IDadosUsuario, TiposUsuarioEnum } from "../../../shared";
 import { BsArrowLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { CUIAutoComplete, Item } from "chakra-ui-autocomplete";
 
 interface IDadosUsuarioStatus extends IDadosUsuario {
   status: number;
@@ -89,23 +90,40 @@ export const AlterarStatusUsuario = () => {
         </VStack>
 
         <FormControl>
-          <FormLabel>Usuário:</FormLabel>
-
-          <Select
-            placeholder="Selecione o  usuário"
-            rounded="none"
-            variant="filled"
-            value={dadosUsuario?.idUsuario}
-            onChange={(e) => {
-              onChangeUsuario(Number(e.target.value));
+          <CUIAutoComplete
+            label="Usuário:"
+            placeholder="Digite o nome do usuário"
+            onSelectedItemsChange={(changes) => {
+              if (changes.selectedItems) {
+                onChangeUsuario(
+                  Number(
+                    changes.selectedItems[changes.selectedItems.length - 1]
+                      ?.value
+                  )
+                );
+              } else {
+                setDadosUsuario({} as IDadosUsuarioStatus);
+              }
             }}
-          >
-            {usuarios?.map((usuario) => (
-              <option key={usuario.idUsuario} value={usuario.idUsuario}>
-                {usuario.nome}
-              </option>
-            ))}
-          </Select>
+            items={usuarios.map((usr) => {
+              return {
+                value: usr.idUsuario.toString(),
+                label: usr.nome,
+              } as Item;
+            })}
+            selectedItems={
+              dadosUsuario?.idUsuario
+                ? [
+                    {
+                      value: dadosUsuario.idUsuario.toString(),
+                      label: usuarios.filter(
+                        (usr) => usr.idUsuario === dadosUsuario.idUsuario
+                      )[0].nome,
+                    },
+                  ]
+                : []
+            }
+          />
         </FormControl>
 
         <FormControl>
