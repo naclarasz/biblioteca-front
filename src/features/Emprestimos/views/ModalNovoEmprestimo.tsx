@@ -149,8 +149,9 @@ export const ModalNovoEmprestimo = ({
         <ModalCloseButton />
         <ModalBody>
           <VStack spacing={4} align="flex-start" w="full">
-            <FormControl>
+            <FormControl marginBottom="-8">
               <CUIAutoComplete
+                disableCreateItem
                 label="Usuário:"
                 placeholder="Digite o nome do usuário"
                 onSelectedItemsChange={(changes) => {
@@ -186,8 +187,9 @@ export const ModalNovoEmprestimo = ({
               />
             </FormControl>
 
-            <FormControl>
+            <FormControl marginBottom="-8">
               <CUIAutoComplete
+                disableCreateItem
                 label="Livro:"
                 placeholder="Digite o título do livro"
                 onSelectedItemsChange={(changes) => {

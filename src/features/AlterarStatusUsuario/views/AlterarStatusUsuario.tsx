@@ -89,12 +89,14 @@ export const AlterarStatusUsuario = () => {
           <Heading size="md">Alterar o status/tipo de um usuário</Heading>
         </VStack>
 
-        <FormControl>
+        <FormControl marginBottom="-8">
           <CUIAutoComplete
+            disableCreateItem
             label="Usuário:"
             placeholder="Digite o nome do usuário"
             onSelectedItemsChange={(changes) => {
-              if (changes.selectedItems) {
+              console.log(changes.selectedItems);
+              if (changes.selectedItems?.length) {
                 onChangeUsuario(
                   Number(
                     changes.selectedItems[changes.selectedItems.length - 1]
@@ -102,7 +104,7 @@ export const AlterarStatusUsuario = () => {
                   )
                 );
               } else {
-                setDadosUsuario({} as IDadosUsuarioStatus);
+                setDadosUsuario(null);
               }
             }}
             items={usuarios.map((usr) => {
