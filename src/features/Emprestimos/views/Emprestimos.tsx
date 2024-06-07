@@ -142,7 +142,7 @@ export const Emprestimos = () => {
         ) : (
           <Tabs variant="enclosed">
             <TabList>
-              <Tab>Penentes</Tab>
+              <Tab>Pendentes</Tab>
               <Tab>Vencidos</Tab>
               <Tab>Entregues</Tab>
             </TabList>
