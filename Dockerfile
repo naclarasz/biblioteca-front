@@ -1,5 +1,5 @@
 # Escolha uma imagem base oficial do Node como ponto de partida
-FROM node:latest
+FROM node:latest as build-stage
 
 # Defina o diretório de trabalho no contêiner
 WORKDIR /app
@@ -19,11 +19,11 @@ RUN npm run build
 # Escolha uma imagem base do nginx para servir a aplicação
 FROM nginx:alpine
 
-# Copie a configuração personalizada do nginx para o diretório de configuração padrão
-COPY nginx.conf /etc/nginx/nginx.conf
-
 # Copie os arquivos estáticos gerados pelo comando de construção para o diretório do nginx
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /app/build /usr/share/nginx/html
+
+# Adicione a configuração personalizada do nginx
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 # Exponha a porta 80 para permitir o acesso ao contêiner
 EXPOSE 80
