@@ -142,7 +142,7 @@ export const Emprestimos = () => {
         ) : (
           <Tabs variant="enclosed">
             <TabList>
-              <Tab>A vencer</Tab>
+              <Tab>Penentes</Tab>
               <Tab>Vencidos</Tab>
               <Tab>Entregues</Tab>
             </TabList>
@@ -155,7 +155,7 @@ export const Emprestimos = () => {
                     emprestimos={dadosTabelaEmprestimos.emprestimosAVencer}
                   />
                 ) : (
-                  <Text>Nenhum empréstimo a vencer</Text>
+                  <Text>Nenhum empréstimo pendente</Text>
                 )}
               </TabPanel>
               <TabPanel>
